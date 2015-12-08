@@ -1,5 +1,9 @@
 package com.epam.restassured;
 
+//TODO: 1. rename to UEL Builder and implement Builder pattern
+//TODO: 2. Facade can be used as well
+//TODO: URL Builder interface to handle URLs for webdriver scripts
+
 public class ServiceTestingProperties {
 	//Base URL for REST API
 	public final static String REST_API_URL = "https://t7-f0x.rhcloud.com/subscription/api/subscribers/";

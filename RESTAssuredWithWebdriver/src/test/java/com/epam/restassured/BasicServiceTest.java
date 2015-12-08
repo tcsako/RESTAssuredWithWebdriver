@@ -1,5 +1,12 @@
 package com.epam.restassured;
 
+//TODO: 1. create basic webdriver script + proper page object pattern usage
+//TODO: 2. create basic script to do the subscription with webdriver and verify with rest
+//TODO: 3. create composition for subscription page with PO (using abstract factory)
+//TODO: 4. cerate CSV reader with Singleton design pattern
+//TODO: 5. create DDT script for REST script
+//TODO: 6. create DDT script for webdriver script
+//TODO: 7. create rest script without BDD style (using JUnit asssertions)
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
@@ -45,18 +52,14 @@ public class BasicServiceTest {
 
 	@Test
 	public void addRecord() {
-		given().
-			contentType(ServiceTestingProperties.JSON_CONTENT_TYPE).
-		and().
-			post(ServiceTestingProperties.getUrlToPostData(firstName, lastName, emailAddress, emailAddressConfirmation, newsletterOptIn));
-		when().
-			get(ServiceTestingProperties.REST_API_URL).
-		then().
-			statusCode(HTTP_OK).
-		and().
-			content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).
-		and().
-			content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
+		given().contentType(ServiceTestingProperties.JSON_CONTENT_TYPE).
+		and().post(ServiceTestingProperties.getUrlToPostData(firstName, lastName, emailAddress, emailAddressConfirmation, newsletterOptIn));
+		
+		when().get(ServiceTestingProperties.REST_API_URL).
+		
+		then().statusCode(HTTP_OK).
+		and().content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).
+		and().content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
 	}
 
 }
