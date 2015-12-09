@@ -1,6 +1,6 @@
 package com.epam.restassured;
 
-//TODO: 1. rename to UEL Builder and implement Builder pattern
+//TODO: 1. rename to UEL Builder and implement Builder pattern mert
 //TODO: 2. Facade can be used as well
 //TODO: URL Builder interface to handle URLs for webdriver scripts
 
