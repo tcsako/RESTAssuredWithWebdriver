@@ -15,23 +15,23 @@ public class HomePageObject {
         @FindBy(id = "firstName")
         private WebElement firstName;
 
-        @FindBy(css = "#lastName")
+        @FindBy(id = "#astName")
         private WebElement lastName;
 
-        @FindBy(css = "#emailAddress")
+        @FindBy(id = "emailAddress")
         private WebElement emailAddress;
 
-        @FindBy(css = "#emailAddressConfirmation")
+        @FindBy(id = "emailAddressConfirmation")
         private WebElement confirmEmail;
 
-        @FindBy(css = "#newsletterOptIn1")
+        @FindBy(id = "newsletterOptIn1")
         private WebElement newsLetterCheckBox;
 
         @FindBy(css = "input[type=\"submit\"]")
         private WebElement submitButton;
 
         /**
-         * Class constructor
+         * Class constructor.
          *
          * @param driver - {@link WebDriver}.
          */
@@ -59,7 +59,7 @@ public class HomePageObject {
          * @throws Exception
          */
         private void setCheckBoxValue(WebElement checkBox, boolean doYouWantToSelectCheckbox) {
-            if (doYouWantToSelectCheckbox == true) {
+            if (doYouWantToSelectCheckbox) {
                 if (!checkBox.isSelected()) {
                     checkBox.click();
                 }
@@ -78,7 +78,6 @@ public class HomePageObject {
          * @param email Email address of the subscriber.
          * @param emailAgain Verification field for email field.
          * @param newsLetterCheckbox Newsletter checkbox.
-         * @throws Exception When a field not visible or editable, or the page cannot be loaded.
          */
         private void signUp(String firstName, String lastName, String email, String emailAgain,
                             Boolean newsLetterCheckbox) {
@@ -97,7 +96,6 @@ public class HomePageObject {
          * @param email Email address of the subscriber.
          * @param emailAgain Verification field for email field.
          * @param newsLetterCheckbox Newsletter checkbox.
-         * @throws Exception When a field not visible or editable, or the page cannot be loaded.
          */
         public ThankYouPageObject givenSubcribeToNewsletter(String firstName, String lastName, String email,
                                                             String emailAgain,
