@@ -15,8 +15,7 @@ public class Driver {
      * Class constructor.
      */
     static {
-        if (driver == null)
-        {
+        if (driver == null) {
             driver = new FirefoxDriver();
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         }
