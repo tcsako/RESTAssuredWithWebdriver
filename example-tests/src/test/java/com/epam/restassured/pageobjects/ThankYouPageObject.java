@@ -13,6 +13,7 @@ import com.google.common.base.Verify;
  * Created by Peter_Olah1 on 12/10/2015.
  */
 public class ThankYouPageObject {
+
     @FindBy(css = "h1")
     private WebElement headerTitle;
 
@@ -20,7 +21,7 @@ public class ThankYouPageObject {
     private WebElement headerSubtitle;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param driver {@link WebDriver}.
      */
