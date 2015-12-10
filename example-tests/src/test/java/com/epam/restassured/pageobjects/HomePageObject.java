@@ -1,7 +1,6 @@
 package com.epam.restassured.pageobjects;
 
 import com.epam.restassured.util.Driver;
-import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -43,8 +42,6 @@ public class HomePageObject {
         /**
          * @param element An editable field.
          * @param fieldValue The value that you want to enter into the field.
-         * @throws ElementNotVisibleException When the WebElement is not visible.
-         * @throws InterruptedException When the thead's wait is interrupted.
          */
         private void fillField(WebElement element, String fieldValue) {
             element.clear();
@@ -56,7 +53,6 @@ public class HomePageObject {
          *
          * @param checkBox A checkbox WebElement.
          * @param doYouWantToSelectCheckbox True if you want to tick a checkbox, false if you want to de
-         * @throws Exception
          */
         private void setCheckBoxValue(WebElement checkBox, boolean doYouWantToSelectCheckbox) {
             if (doYouWantToSelectCheckbox) {
