@@ -1,20 +1,20 @@
 package com.epam.restassured.pageobjects;
 
-import com.epam.restassured.util.Driver;
+import com.epam.restassured.util.AbstractDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 /**
+ * Contains page elements, and webpage interaction methorsd.
  * Created by Peter_Olah1 on 12/10/2015.
  */
-public class HomePageObject {
+public class HomePageObject extends AbstractDriver {
 
     @FindBy(id = "firstName")
     private WebElement firstName;
 
-    @FindBy(id = "#astName")
+    @FindBy(id = "lastName")
     private WebElement lastName;
 
     @FindBy(id = "emailAddress")
@@ -35,7 +35,7 @@ public class HomePageObject {
      * @param driver - {@link WebDriver}.
      */
     public HomePageObject(WebDriver driver) {
-        PageFactory.initElements(Driver.getDriver(), this);
+        super(driver);
     }
 
 
@@ -92,6 +92,7 @@ public class HomePageObject {
      * @param email Email address of the subscriber.
      * @param emailAgain Verification field for email field.
      * @param newsLetterCheckbox Newsletter checkbox.
+     * @return ThankYouPage instance
      */
     public ThankYouPageObject givenSignUp(String firstName, String lastName, String email,
                                           String emailAgain,
@@ -99,6 +100,7 @@ public class HomePageObject {
 
         signUp(firstName, lastName, email, emailAgain, newsLetterCheckbox);
         submitButton.click();
-        return new ThankYouPageObject(Driver.getDriver());
+        return new ThankYouPageObject(getDriver());
     }
 }
+
