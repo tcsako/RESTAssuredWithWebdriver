@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 import java.io.EOFException;
 
 /**
- *  Contains verification methods to {@ThankYouPageObject} testing.
+ *  Contains verification methods of the page.
  * Created by Peter_Olah1 on 12/10/2015.
  */
 public class ThankYouPageVerifier extends AbstractDriver {
