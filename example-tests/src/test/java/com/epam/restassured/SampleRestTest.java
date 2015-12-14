@@ -31,10 +31,10 @@ public class SampleRestTest {
     private static Logger log = Logger.getLogger(SampleRestTest.class.getName());
 
     @Parameterized.Parameter
-    private int expectedNumberOfElements;
+    public int expectedNumberOfElements;
 
     @Parameterized.Parameter(value = 1)
-    private int actualNumberOfElements;
+    public int actualNumberOfElements;
 
     /**
      *  Sets up the expected and actual parameters for the DDT methods.
