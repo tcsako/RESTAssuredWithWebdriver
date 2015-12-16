@@ -17,6 +17,12 @@ public class HomePageObject extends AbstractDriver {
     @FindBy(id = "lastName")
     private WebElement lastName;
 
+    @FindBy(css = "h1")
+    private WebElement headerTitle;
+
+    @FindBy(css = "h2")
+    private WebElement subHeaderTitle;
+
     @FindBy(id = "emailAddress")
     private WebElement emailAddress;
 
@@ -29,6 +35,9 @@ public class HomePageObject extends AbstractDriver {
     @FindBy(css = "input[type=\"submit\"]")
     private WebElement submitButton;
 
+    @FindBy(id = "form")
+    private WebElement signUpForm;
+
     /**
      * Class constructor.
      *
@@ -38,6 +47,86 @@ public class HomePageObject extends AbstractDriver {
         super(driver);
     }
 
+    /**
+     * Getter for web element.
+     *
+     * @return signUpForm
+     */
+    public WebElement getSignUpForm() {
+        return signUpForm;
+    }
+
+    /**
+     * Getter for web element.
+     *
+     * @return headerTitle
+     */
+    public WebElement getHeaderTitle() {
+        return headerTitle;
+    }
+
+    /**
+     * Getter for web element.
+     *
+     * @return headerTitle
+     */
+    public WebElement getSubHeaderTitle() {
+        return subHeaderTitle;
+    }
+
+    /**
+     * Getter for web element.
+     *
+     * @return firstName
+     */
+    public WebElement getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * Getter for web element.
+     *
+     * @return lastName
+     */
+    public WebElement getLastName() {
+        return lastName;
+    }
+
+    /**
+     * Getter for web element.
+     *
+     * @return emailAddress
+     */
+    public WebElement getEmailAddress() {
+        return emailAddress;
+    }
+
+    /**
+     * Getter for web element.
+     *
+     * @return confirmEmail
+     */
+    public WebElement getConfirmEmail() {
+        return confirmEmail;
+    }
+
+    /**
+     * Getter for web element.
+     *
+     * @return newsLetterCheckBox
+     */
+    public WebElement getNewsLetterCheckBox() {
+        return newsLetterCheckBox;
+    }
+
+    /**
+     * Getter for web element.
+     *
+     * @return submitButton
+     */
+    public WebElement getSubmitButton() {
+        return submitButton;
+    }
 
     /**
      * @param element An editable field.
@@ -103,4 +192,5 @@ public class HomePageObject extends AbstractDriver {
         return new ThankYouPageObject(getDriver());
     }
 }
+
 
