@@ -2,12 +2,11 @@ package com.epam.restassured;
 
 import com.epam.restassured.pageobjects.ThankYouPageObject;
 import com.epam.restassured.util.AbstractDriver;
+import com.google.common.base.Verify;
 import org.openqa.selenium.WebDriver;
 
-import java.io.EOFException;
-
 /**
- *  Contains verification methods of the page.
+ *  Contains verification methods of {@ThankYouPageObject} the page.
  * Created by Peter_Olah1 on 12/10/2015.
  */
 public class ThankYouPageVerifier extends AbstractDriver {
@@ -29,7 +28,7 @@ public class ThankYouPageVerifier extends AbstractDriver {
      *
      */
     private void isSubTitleContainsEmail(String email) {
-        com.google.common.base.Verify.verify(thanksPage.getHeaderSubtitle().getText().contains(email));
+        Verify.verify(thanksPage.getHeaderSubtitle().getText().contains(email));
     }
 
     /**
@@ -37,10 +36,9 @@ public class ThankYouPageVerifier extends AbstractDriver {
      *
      * @param firstName The displayed first name.
      * @param email The displayed email address.
-     * @throws EOFException When end of file or end of stream has been reached unexpectedly during input.
      */
-    public void whenSubscribeFinishedCheckDataOnPage(String firstName, String email) throws EOFException {
-        com.google.common.base.Verify.verify(getDriver().getCurrentUrl().startsWith(
+    public void whenSubscribeFinishedCheckDataOnPage(String firstName, String email) {
+        Verify.verify(getDriver().getCurrentUrl().startsWith(
                 "https://t7-f0x.rhcloud.com/subscription/thank-you.html?"));
         isHeaderContainsFirstName(firstName);
         isSubTitleContainsEmail(email);
@@ -51,8 +49,8 @@ public class ThankYouPageVerifier extends AbstractDriver {
      *
      * @param firstName The user's first name.
      */
-    private void isHeaderContainsFirstName(String firstName) throws EOFException {
-        com.google.common.base.Verify.verify(thanksPage.getHeaderTitle().getText()
+    private void isHeaderContainsFirstName(String firstName) {
+        Verify.verify(thanksPage.getHeaderTitle().getText()
                 .equals("Thank you " + firstName + "!"));
     }
 
