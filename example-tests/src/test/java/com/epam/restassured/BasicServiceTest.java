@@ -61,7 +61,11 @@ public class BasicServiceTest {
 
         log.info("*******************************************");
         log.info("Deleting existing records");
-        given().delete(ServiceTestingProperties.REST_API_URL);
+        if (given().delete(ServiceTestingProperties.REST_API_URL).getStatusCode() == httpOkStatus) {
+            log.info("Records were deleted successfully");
+        } else {
+            log.info("Something went wrong! Existing records couldn't be deleted");
+        }
 
         log.info("Setting up test data");
         firstName = "John";
