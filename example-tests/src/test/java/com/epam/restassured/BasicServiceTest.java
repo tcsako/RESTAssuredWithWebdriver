@@ -10,6 +10,7 @@ package com.epam.restassured;
 
 import com.epam.restassured.pageobjects.HomePageObject;
 import com.epam.restassured.pageobjects.ThankYouPageObject;
+import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -33,14 +34,15 @@ public class BasicServiceTest {
     private static final int NUMBER_OF_RESPONSE = 1;
     private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
     private static final String CONTENT_EMAIL_ADDRESS = "content.emailAddress";
-    private static final int HTTP_OK = 200;
 
     // Test data
+
     private String firstName;
     private String lastName;
     private String emailAddress;
     private String emailAddressConfirmation;
     private boolean subscribeNewsletter;
+    private int httpOkStatus;
 
     // Verification
     private List<String> listToVerifyEmail;
@@ -67,6 +69,7 @@ public class BasicServiceTest {
         emailAddress = "johndoe@freecloud.com";
         emailAddressConfirmation = "johndoe@freecloud.com";
         subscribeNewsletter = true;
+        httpOkStatus =  HttpStatus.SC_OK;
 
         log.info("Setting up verification data");
         listToVerifyEmail = new ArrayList<String>();
@@ -92,7 +95,7 @@ public class BasicServiceTest {
         log.info("Checking 'Thank you' page URL, subscriber name and e-mail");
         thankYouPageVerifier.whenSubscribeFinishedCheckDataOnPage(firstName, emailAddress);
         when().get(ServiceTestingProperties.REST_API_URL).
-                then().statusCode(HTTP_OK).
+                then().statusCode(httpOkStatus).
                 and().content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).
                 and().content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
     }
