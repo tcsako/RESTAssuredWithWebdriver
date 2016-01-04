@@ -1,37 +1,30 @@
 package com.epam.restassured.csvreader;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.epam.restassured.pojo.csv.CSVTestInput;
-import com.opencsv.CSVReader;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+
+import com.epam.restassured.exception.TestExecutionException;
+import com.epam.restassured.pojo.csv.CSVRestTestInput;
 
 /**
  * Singleton representation of a CSV Reader utility class.
- * 
- * Please note, CSV input files should follow the following format:
- * No comment line, data should start in the first line in the following oder
- * FirstName,LastName,EmailAddress,EmailAddressConfirmation,NewsletterOptIn
- * 
- * Open issue for OpenCSV to add comment line in the first line of the input CSV file
  * 
  * @author Tamas_Csako
  *
  */
 public class CSVReaderUtilitySingleton {
-	
-	//Default file name to read input data
-	private static final String DEFAULT_TEST_INPUT_FILE = "test_data_rest.csv";
-	//Private instance
+	// Private instance
 	private static CSVReaderUtilitySingleton instance = null;
-	
-	//Protected constructor for the Singleton implementation
-	protected CSVReaderUtilitySingleton(){
+
+	// Protected constructor for the Singleton implementation
+	protected CSVReaderUtilitySingleton() {
 	}
-	
+
 	/**
 	 * Public method to get instance for the Singleton class
 	 * 
@@ -42,64 +35,67 @@ public class CSVReaderUtilitySingleton {
 		if (instance == null) {
 			instance = new CSVReaderUtilitySingleton();
 		}
-		
+
 		return instance;
 	}
 
 	/**
-	 * Method to get test input data from resource file.
+	 * Method to get test input data from resource file for REST service related
+	 * scripts. 
 	 * 
-	 * @param fileName - file name and path to read input data
+	 * Please note, CSV input files should follow the following format:
+	 * line, data should start in the first line in the following oder
+	 * FirstName,LastName,EmailAddress,EmailAddressConfirmation,NewsletterOptIn
+	 * Use '#' to comment lines
+	 * 
+	 * 
+	 * @param fileName
+	 *            - file name and path to read input data
 	 * @return list of input data in CSVTestInput format
+	 * @throws TestExecutionException
+	 *             exception to handle issues during reading
 	 */
-	@SuppressWarnings("resource")
-	public List<CSVTestInput> getIntput(String fileName) {
-		List <String[]> allLines = null;
-		
-		//Set default test input data if necessary (parameter is null)
-		if (fileName == null) {
-			fileName = DEFAULT_TEST_INPUT_FILE;
-		}
-		
-		
-		//Read all input data from resource file
+	public List<CSVRestTestInput> getIntput(String fileName, String[] fileHeaderMapping) throws TestExecutionException {
+		List<CSVRestTestInput> testInputs = null;
+		FileReader fileReader = null;
+
+		// Read all input data from resource file
 		try {
-			CSVReader reader = new CSVReader(new FileReader(fileName));
-			allLines = reader.readAll();
-		} catch (FileNotFoundException e) {
-			//Handle exception when file is not found
-			//TODO: use Log4j for logging
-			e.printStackTrace();
-			return null;
+			// Create a new list of test input to be filled by CSV file data
+			testInputs = new ArrayList<CSVRestTestInput>();
+
+			// initialize FileReader object
+			fileReader = new FileReader(fileName);
+
+			// Get formatted CSV input
+			Iterable<CSVRecord> records = CSVFormat.DEFAULT.withCommentMarker('#').withHeader(fileHeaderMapping)
+					.parse(fileReader);
+
+			// Read the CSV file records starting from the second record to skip
+			// the header
+			for (CSVRecord record : records) {
+				testInputs.add(convertInput(record, fileHeaderMapping));
+			}
 		} catch (IOException e) {
-			//Handle IO exception during reading from file
-			//TODO: use Log4j for logging
-			e.printStackTrace();
-			return null;
+			// Handle exception when file is not found
+			// TODO: use Log4j for logging
+			throw new TestExecutionException(e.getMessage());
 		}
-		
-		return convertInput(allLines);
+
+		return testInputs;
 	}
-	
+
 	/**
-	 * Private method to convert text data into objects
+	 * Private method to convert REST service test data into object
 	 * 
-	 * @param testInputLines String array with test input lines
-	 * @return converted test input data in ArrayList
+	 * @param record
+	 *            one line from CSV file
+	 * @return converted test input data in CSVRestTestInput pojo
 	 */
-	private List<CSVTestInput> convertInput(List <String[]> testInputLines) {
-		List<CSVTestInput> convertedInput = new ArrayList<CSVTestInput>();
-		
-		for (String[] line : testInputLines) {
-			CSVTestInput input = new CSVTestInput();
-			input.setFirstName(line[0]);
-			input.setLastName(line[1]);
-			input.setEmailAddress(line[2]);
-			input.setEmailAddressConfirmation(line[3]);
-			input.setNewsletterOptIn(Boolean.valueOf(line[4]));
-			convertedInput.add(input);
-		}
-		
-		return convertedInput;
+	private CSVRestTestInput convertInput(CSVRecord record, String[] fileHeaderMapping) {
+		return new CSVRestTestInput.CSVRestTestInputBuilder().firstName(record.get(fileHeaderMapping[0]))
+				.lastName(record.get(fileHeaderMapping[1])).emailAddress(record.get(fileHeaderMapping[2]))
+				.emailAddressConfirmation(record.get(fileHeaderMapping[3]))
+				.newsletterOptIn(Boolean.valueOf(record.get(fileHeaderMapping[4]))).build();
 	}
 }

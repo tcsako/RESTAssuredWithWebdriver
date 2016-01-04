@@ -16,7 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import com.epam.restassured.csvreader.CSVReaderUtilitySingleton;
+import com.epam.restassured.exception.TestExecutionException;
+import com.epam.restassured.pojo.csv.CSVRestTestInput;
 
 public class BasicServiceTest {
 	//Test data
@@ -32,6 +37,11 @@ public class BasicServiceTest {
 	private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
 	private static final String CONTENT_EMAIL_ADDRESS = "content.emailAddress";
 	private static final int HTTP_OK = 200;
+	// Default file name to read input data
+	private static final String DEFAULT_TEST_INPUT_FILE = "test_data_rest.csv";
+	// CSV file header
+	private static final String[] DEFAULT_FILE_HEADER_MAPPING = { "firstName", "lastName", "emailAddress",
+			"emailAddressConfirmation", "newsletterOptIn" };
 
 	@Before
 	public void setUp() throws Exception {
@@ -50,7 +60,7 @@ public class BasicServiceTest {
 		listToVerifyEmail.add(emailAddress);
 	}
 
-	@Test
+	@Test @Ignore
 	public void addRecord() {
 		given().contentType(ServiceTestingProperties.JSON_CONTENT_TYPE).
 		and().post(ServiceTestingProperties.getUrlToPostData(firstName, lastName, emailAddress, emailAddressConfirmation, newsletterOptIn));
@@ -62,4 +72,11 @@ public class BasicServiceTest {
 		and().content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
 	}
 
+	@Test
+	public void readFromCSV() throws TestExecutionException {
+		List<CSVRestTestInput> testInputs = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE, DEFAULT_FILE_HEADER_MAPPING);
+		for (CSVRestTestInput csvTestInput : testInputs) {
+			System.out.println(csvTestInput.toString());
+		}
+	}
 }
