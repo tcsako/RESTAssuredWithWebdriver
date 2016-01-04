@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.epam.restassured.csvreader.CSVReaderUtilitySingleton;
@@ -24,14 +23,7 @@ import com.epam.restassured.exception.TestExecutionException;
 import com.epam.restassured.pojo.csv.CSVRestTestInput;
 
 public class BasicServiceTest {
-	//Test data
-	private String firstName;
-	private String lastName;
-	private String emailAddress;
-	private String emailAddressConfirmation;
-	private String newsletterOptIn;
-
-	//Verification
+	// Verification
 	private List<String> listToVerifyEmail;
 	private static final int NUMBER_OF_RESPONSE = 1;
 	private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
@@ -45,38 +37,29 @@ public class BasicServiceTest {
 
 	@Before
 	public void setUp() throws Exception {
-		//Delete all existing record
+		// Delete all existing record
 		given().delete(ServiceTestingProperties.REST_API_URL);
-		
-		//Setup test data
-		firstName = "John";
-		lastName = "Doe";
-		emailAddress = "johndoe@freecloud.com";
-		emailAddressConfirmation = "johndoe@freecloud.com";
-		newsletterOptIn = "true";
-		
-		//Setup verification data
-		listToVerifyEmail = new ArrayList<String>();
-		listToVerifyEmail.add(emailAddress);
-	}
-
-	@Test @Ignore
-	public void addRecord() {
-		given().contentType(ServiceTestingProperties.JSON_CONTENT_TYPE).
-		and().post(ServiceTestingProperties.getUrlToPostData(firstName, lastName, emailAddress, emailAddressConfirmation, newsletterOptIn));
-		
-		when().get(ServiceTestingProperties.REST_API_URL).
-		
-		then().statusCode(HTTP_OK).
-		and().content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).
-		and().content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
 	}
 
 	@Test
-	public void readFromCSV() throws TestExecutionException {
-		List<CSVRestTestInput> testInputs = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE, DEFAULT_FILE_HEADER_MAPPING);
+	public void addRecord() throws TestExecutionException {
+		List<CSVRestTestInput> testInputs = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE,
+				DEFAULT_FILE_HEADER_MAPPING);
 		for (CSVRestTestInput csvTestInput : testInputs) {
-			System.out.println(csvTestInput.toString());
+			// Setup verification data
+			listToVerifyEmail = new ArrayList<String>();
+			listToVerifyEmail.add(csvTestInput.getEmailAddress());
+
+			given().contentType(ServiceTestingProperties.JSON_CONTENT_TYPE).and()
+					.post(ServiceTestingProperties.getUrlToPostData(csvTestInput.getFirstName(),
+							csvTestInput.getLastName(), csvTestInput.getEmailAddress(),
+							csvTestInput.getEmailAddressConfirmation(),
+							String.valueOf(csvTestInput.isNewsletterOptIn())));
+
+			when().get(ServiceTestingProperties.REST_API_URL).
+
+			then().statusCode(HTTP_OK).and().content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).and()
+					.content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
 		}
 	}
 }
