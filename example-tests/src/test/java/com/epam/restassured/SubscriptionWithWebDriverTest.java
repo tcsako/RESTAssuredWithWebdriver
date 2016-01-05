@@ -1,6 +1,9 @@
 package com.epam.restassured;
 
-import com.epam.restassured.pageobjects.HomePageObject;
+import com.epam.restassured.pageobjects.SignUpPagePageObject;
+import com.epam.restassured.pageobjects.SignUpPageVerifier;
+import com.epam.restassured.pageobjects.ThankYouPagePageObject;
+import com.epam.restassured.pageobjects.ThankYouPageVerifier;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -15,16 +18,17 @@ import static com.jayway.restassured.RestAssured.given;
  */
 public class SubscriptionWithWebDriverTest {
 
-    private Logger log = Logger.getLogger(BasicServiceTest.class.getName());
+    private Logger log = Logger.getLogger(BasicServiceTest.class);
     private String firstName;
     private String lastName;
     private String emailAddress;
     private String emailAddressConfirmation;
     private String baseURL;
     private boolean subscribeNewsletter;
-    private HomePageObject homePageObject;
+    private SignUpPagePageObject signUpPagePageObject;
     private ThankYouPageVerifier thankYouPageVerifier;
-    private HomePageVerifier homePageVerifier;
+    private SignUpPageVerifier signUpPageVerifier;
+    private ThankYouPagePageObject thankYouPage;
     private WebDriver driver;
 
     /**
@@ -49,9 +53,8 @@ public class SubscriptionWithWebDriverTest {
         driver = new FirefoxDriver();
         log.info("Opening subscription page");
         driver.get(baseURL);
-        homePageObject = new HomePageObject(driver);
-        thankYouPageVerifier = new ThankYouPageVerifier(driver);
-        homePageVerifier = new HomePageVerifier(driver);
+        signUpPagePageObject = new SignUpPagePageObject(driver);
+        signUpPageVerifier = new SignUpPageVerifier(signUpPagePageObject);
     }
 
     /**
@@ -60,10 +63,12 @@ public class SubscriptionWithWebDriverTest {
      */
     @Test
     public void signUpSubscriber() {
-        homePageVerifier.getInstance();
-        homePageVerifier.checkHomePageFields();
-        homePageVerifier.checkHomePageHeaders();
-        homePageObject.givenSignUp(firstName, lastName, emailAddress, emailAddressConfirmation, subscribeNewsletter);
+        driver.get(baseURL);
+        signUpPageVerifier.checkSignUpPageFields();
+        signUpPageVerifier.checkSignUpPageHeaders();
+        signUpPagePageObject.givenSignUp(firstName, lastName, emailAddress, emailAddressConfirmation, subscribeNewsletter);
+        thankYouPage = new ThankYouPagePageObject(driver);
+        thankYouPageVerifier = new ThankYouPageVerifier(thankYouPage);
         thankYouPageVerifier.whenSubscribeFinishedCheckDataOnPage(firstName, emailAddress);
     }
 
