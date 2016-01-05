@@ -16,9 +16,9 @@ import static com.jayway.restassured.RestAssured.given;
 /**
  * Created by Peter_Olah1 on 12/16/2015.
  */
-public class SubscriptionWithWebDriverTest {
+public class BasicServiceTestWithWebDriver {
 
-    private Logger log = Logger.getLogger(BasicServiceTest.class);
+    private Logger log = Logger.getLogger(BasicServiceTestWithWebDriverAndRest.class);
     private String firstName;
     private String lastName;
     private String emailAddress;

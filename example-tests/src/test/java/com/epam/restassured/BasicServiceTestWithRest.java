@@ -7,17 +7,13 @@ package com.epam.restassured;
 //TODO: 5. create DDT script for REST script
 //TODO: 6. create DDT script for webdriver script
 //TODO: 7. create rest script without BDD style (using JUnit asssertions)
-
 import com.epam.restassured.pageobjects.SignUpPagePageObject;
 import com.epam.restassured.pageobjects.ThankYouPagePageObject;
 import com.epam.restassured.pageobjects.ThankYouPageVerifier;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +23,8 @@ import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-/**
- * Created by Tamas_Csako
- */
-public class BasicServiceTest{
-    private static Logger log = Logger.getLogger(BasicServiceTest.class);
+public class BasicServiceTestWithRest {
+    private static Logger log = Logger.getLogger(BasicServiceTestWithRest.class);
     private static final int NUMBER_OF_RESPONSE = 1;
     private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
     private static final String CONTENT_EMAIL_ADDRESS = "content.emailAddress";
@@ -41,7 +34,7 @@ public class BasicServiceTest{
     private String lastName;
     private String emailAddress;
     private String emailAddressConfirmation;
-    private boolean subscribeNewsletter;
+    private String newsletterOptIn;
     private int httpOkStatus;
     // Verification
     private List<String> listToVerifyEmail;
@@ -49,7 +42,6 @@ public class BasicServiceTest{
     private SignUpPagePageObject signUpPagePageObject;
     private ThankYouPagePageObject thankYouPagePageObject;
     private ThankYouPageVerifier thankYouPageVerifier;
-    private WebDriver driver;
 
     /**
      * Responsible for setting up test data and environment.
@@ -72,46 +64,24 @@ public class BasicServiceTest{
         lastName = "Doe";
         emailAddress = "johndoe@freecloud.com";
         emailAddressConfirmation = "johndoe@freecloud.com";
-        subscribeNewsletter = true;
         httpOkStatus =  HttpStatus.SC_OK;
+        newsletterOptIn = "true";
 
         log.info("Setting up verification data");
         listToVerifyEmail = new ArrayList<String>();
         listToVerifyEmail.add(emailAddress);
         log.info("Initializing Firefox driver");
-        driver = new FirefoxDriver();
         log.info("Opening subscription page");
-        driver.get("https://t7-f0x.rhcloud.com/subscription/subscription.html");
-        signUpPagePageObject = new SignUpPagePageObject(driver);
+      //  driver.get("https://t7-f0x.rhcloud.com/subscription/subscription.html");
     }
 
-    /**
-     * Makes an automated subscription then checks the data correctness.
-     *
-     * @throws Exception
-     */
     @Test
-    public void addRecord() throws Exception {
-        log.info("Filling fields and sending data");
-        signUpPagePageObject.givenSignUp(firstName, lastName, emailAddress, emailAddressConfirmation,
-                subscribeNewsletter);
-        thankYouPagePageObject = new ThankYouPagePageObject(driver);
-        log.info("Checking 'Thank you' page URL, subscriber name and e-mail");
-        thankYouPageVerifier = new ThankYouPageVerifier(thankYouPagePageObject);
-        thankYouPageVerifier.whenSubscribeFinishedCheckDataOnPage(firstName, emailAddress);
+    public void addRecord() {
+        given().contentType(ServiceTestingProperties.JSON_CONTENT_TYPE).
+        and().post(ServiceTestingProperties.getUrlToPostData(firstName, lastName, emailAddress, emailAddressConfirmation, newsletterOptIn));
         when().get(ServiceTestingProperties.REST_API_URL).
-                then().statusCode(httpOkStatus).
-                and().content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).
-                and().content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
-    }
-    //TODO  1 webdriver version(SubscriptionWithWebDriver), 1 mixed(.this) and one unmodified;
-    /**
-     *  Closes the browser after test execution.
-     */
-    @After
-    public void closeDriver() {
-        if (driver != null) {
-            driver.quit();
-        }
+        then().statusCode(httpOkStatus).
+        and().content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).
+        and().content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
     }
 }
