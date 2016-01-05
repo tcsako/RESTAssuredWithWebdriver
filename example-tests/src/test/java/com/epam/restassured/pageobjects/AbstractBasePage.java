@@ -1,12 +1,12 @@
-package com.epam.restassured.util;
+package com.epam.restassured.pageobjects;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
 /**
- * Created by Peter_Olah1 on 12/10/2015.
+ * Created by Peter_Olah1 on 12/21/2015.
  */
-public class AbstractDriver {
+public abstract class AbstractBasePage {
     private WebDriver driver;
 
     /**
@@ -14,7 +14,7 @@ public class AbstractDriver {
      *
      * @param driver {@link WebDriver}
      */
-    public AbstractDriver(WebDriver driver) {
+    public AbstractBasePage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(this.driver, this);
     }
@@ -26,4 +26,3 @@ public class AbstractDriver {
         return driver;
     }
 }
-
