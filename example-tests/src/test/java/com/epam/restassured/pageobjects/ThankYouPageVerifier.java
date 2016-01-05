@@ -15,7 +15,7 @@ public class ThankYouPageVerifier{
      */
     public ThankYouPageVerifier(ThankYouPagePageObject thanksPage) {
         this.thanksPage= thanksPage;
-         }
+    }
 
     /**
      *  Verifies that is the page sub header contains the user's email address.

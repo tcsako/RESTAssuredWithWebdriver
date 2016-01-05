@@ -8,8 +8,9 @@ package com.epam.restassured;
 //TODO: 6. create DDT script for webdriver script
 //TODO: 7. create rest script without BDD style (using JUnit asssertions)
 
-import com.epam.restassured.pageobjects.HomePageObject;
-import com.epam.restassured.pageobjects.ThankYouPageObject;
+import com.epam.restassured.pageobjects.SignUpPagePageObject;
+import com.epam.restassured.pageobjects.ThankYouPagePageObject;
+import com.epam.restassured.pageobjects.ThankYouPageVerifier;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -29,25 +30,24 @@ import static org.hamcrest.Matchers.is;
 /**
  * Created by Tamas_Csako
  */
-public class BasicServiceTest {
-    private static Logger log = Logger.getLogger(BasicServiceTest.class.getName());
+public class BasicServiceTest{
+    private static Logger log = Logger.getLogger(BasicServiceTest.class);
     private static final int NUMBER_OF_RESPONSE = 1;
     private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
     private static final String CONTENT_EMAIL_ADDRESS = "content.emailAddress";
 
     // Test data
-
     private String firstName;
     private String lastName;
     private String emailAddress;
     private String emailAddressConfirmation;
     private boolean subscribeNewsletter;
     private int httpOkStatus;
-
     // Verification
     private List<String> listToVerifyEmail;
-    private HomePageObject homePageObject;
-    private ThankYouPageObject thankYouPageObject;
+
+    private SignUpPagePageObject signUpPagePageObject;
+    private ThankYouPagePageObject thankYouPagePageObject;
     private ThankYouPageVerifier thankYouPageVerifier;
     private WebDriver driver;
 
@@ -82,8 +82,7 @@ public class BasicServiceTest {
         driver = new FirefoxDriver();
         log.info("Opening subscription page");
         driver.get("https://t7-f0x.rhcloud.com/subscription/subscription.html");
-        homePageObject = new HomePageObject(driver);
-        thankYouPageVerifier = new ThankYouPageVerifier(driver);
+        signUpPagePageObject = new SignUpPagePageObject(driver);
     }
 
     /**
@@ -94,22 +93,23 @@ public class BasicServiceTest {
     @Test
     public void addRecord() throws Exception {
         log.info("Filling fields and sending data");
-        thankYouPageObject = homePageObject.givenSignUp(firstName, lastName, emailAddress, emailAddressConfirmation,
+        signUpPagePageObject.givenSignUp(firstName, lastName, emailAddress, emailAddressConfirmation,
                 subscribeNewsletter);
+        thankYouPagePageObject = new ThankYouPagePageObject(driver);
         log.info("Checking 'Thank you' page URL, subscriber name and e-mail");
+        thankYouPageVerifier = new ThankYouPageVerifier(thankYouPagePageObject);
         thankYouPageVerifier.whenSubscribeFinishedCheckDataOnPage(firstName, emailAddress);
         when().get(ServiceTestingProperties.REST_API_URL).
                 then().statusCode(httpOkStatus).
                 and().content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).
                 and().content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
     }
-
+    //TODO  1 webdriver version(SubscriptionWithWebDriver), 1 mixed(.this) and one unmodified;
     /**
      *  Closes the browser after test execution.
      */
     @After
     public void closeDriver() {
-        log.info("Closing browser");
         if (driver != null) {
             driver.quit();
         }

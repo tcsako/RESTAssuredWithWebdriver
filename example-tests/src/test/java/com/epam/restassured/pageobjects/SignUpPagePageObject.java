@@ -1,6 +1,6 @@
 package com.epam.restassured.pageobjects;
 
-import com.epam.restassured.util.AbstractDriver;
+import com.google.common.base.Verify;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
  * Contains page elements, and webpage interaction methorsd.
  * Created by Peter_Olah1 on 12/10/2015.
  */
-public class HomePageObject extends AbstractDriver {
+public class SignUpPagePageObject extends AbstractBasePage {
 
     @FindBy(id = "firstName")
     private WebElement firstName;
@@ -43,7 +43,7 @@ public class HomePageObject extends AbstractDriver {
      *
      * @param driver - {@link WebDriver}.
      */
-    public HomePageObject(WebDriver driver) {
+    public SignUpPagePageObject(WebDriver driver) {
         super(driver);
     }
 
@@ -106,18 +106,6 @@ public class HomePageObject extends AbstractDriver {
      *
      * @return confirmEmail
      */
-    public WebElement getConfirmEmail() {
-        return confirmEmail;
-    }
-
-    /**
-     * Getter for web element.
-     *
-     * @return newsLetterCheckBox
-     */
-    public WebElement getNewsLetterCheckBox() {
-        return newsLetterCheckBox;
-    }
 
     /**
      * Getter for web element.
@@ -133,6 +121,7 @@ public class HomePageObject extends AbstractDriver {
      * @param fieldValue The value that you want to enter into the field.
      */
     private void fillField(WebElement element, String fieldValue) {
+        //TODO WebElemwnt wrapperbe
         element.clear();
         element.sendKeys(fieldValue);
     }
@@ -143,6 +132,7 @@ public class HomePageObject extends AbstractDriver {
      * @param checkBox A checkbox WebElement.
      * @param doYouWantToSelectCheckbox True if you want to tick a checkbox, false if you want to de
      */
+    //TODO WebElemwnt wrapperbe
     private void setCheckBoxValue(WebElement checkBox, boolean doYouWantToSelectCheckbox) {
         if (doYouWantToSelectCheckbox) {
             if (!checkBox.isSelected()) {
@@ -153,6 +143,16 @@ public class HomePageObject extends AbstractDriver {
                 checkBox.click();
             }
         }
+    }
+
+    /**
+     *  Verifies that the subscription page elements are visible and enabled.
+     */
+    public void signUpPageFieldDisplayTest(){
+        Verify.verify(firstName.isDisplayed());
+        Verify.verify(lastName.isDisplayed());
+        Verify.verify(emailAddress.isDisplayed());
+        Verify.verify(submitButton.isDisplayed());
     }
 
     /**
@@ -183,14 +183,12 @@ public class HomePageObject extends AbstractDriver {
      * @param newsLetterCheckbox Newsletter checkbox.
      * @return ThankYouPage instance
      */
-    public ThankYouPageObject givenSignUp(String firstName, String lastName, String email,
+    public void givenSignUp(String firstName, String lastName, String email,
                                           String emailAgain,
                                           Boolean newsLetterCheckbox) {
 
         signUp(firstName, lastName, email, emailAgain, newsLetterCheckbox);
         submitButton.click();
-        return new ThankYouPageObject(getDriver());
+
     }
 }
-
-

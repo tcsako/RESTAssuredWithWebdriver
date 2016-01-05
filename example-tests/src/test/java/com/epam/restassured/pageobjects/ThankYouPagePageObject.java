@@ -1,6 +1,5 @@
 package com.epam.restassured.pageobjects;
 
-import com.epam.restassured.util.AbstractDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,7 +11,7 @@ import org.openqa.selenium.support.FindBy;
  * @author Peter_Olah1
  *
  */
-public class ThankYouPageObject extends AbstractDriver {
+public class ThankYouPagePageObject extends AbstractBasePage {
 
     @FindBy(css = "h1")
     private WebElement headerTitle;
@@ -25,7 +24,7 @@ public class ThankYouPageObject extends AbstractDriver {
      *
      * @param driver {@link WebDriver}.
      */
-    public ThankYouPageObject(WebDriver driver) {
+    public ThankYouPagePageObject(WebDriver driver) {
         super(driver);
     }
 
