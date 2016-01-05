@@ -23,8 +23,6 @@ import com.epam.restassured.exception.TestExecutionException;
 import com.epam.restassured.pojo.csv.CSVRestTestInput;
 
 public class BasicServiceTest {
-	// Verification
-	private List<String> listToVerifyEmail;
 	private static final int NUMBER_OF_RESPONSE = 1;
 	private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
 	private static final String CONTENT_EMAIL_ADDRESS = "content.emailAddress";
@@ -35,31 +33,34 @@ public class BasicServiceTest {
 	private static final String[] DEFAULT_FILE_HEADER_MAPPING = { "firstName", "lastName", "emailAddress",
 			"emailAddressConfirmation", "newsletterOptIn" };
 
+	private List<String> listToVerifyEmail;
+	private CSVRestTestInput testInput;
+
 	@Before
 	public void setUp() throws Exception {
 		// Delete all existing record
 		given().delete(ServiceTestingProperties.REST_API_URL);
+
+		// Read test data from CSV file
+		testInput = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE,
+				DEFAULT_FILE_HEADER_MAPPING).get(0);
 	}
 
 	@Test
 	public void addRecord() throws TestExecutionException {
-		List<CSVRestTestInput> testInputs = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE,
-				DEFAULT_FILE_HEADER_MAPPING);
-		for (CSVRestTestInput csvTestInput : testInputs) {
-			// Setup verification data
-			listToVerifyEmail = new ArrayList<String>();
-			listToVerifyEmail.add(csvTestInput.getEmailAddress());
+		// Setup verification data
+		listToVerifyEmail = new ArrayList<String>();
+		listToVerifyEmail.add(testInput.getEmailAddress());
 
-			given().contentType(ServiceTestingProperties.JSON_CONTENT_TYPE).and()
-					.post(ServiceTestingProperties.getUrlToPostData(csvTestInput.getFirstName(),
-							csvTestInput.getLastName(), csvTestInput.getEmailAddress(),
-							csvTestInput.getEmailAddressConfirmation(),
-							String.valueOf(csvTestInput.isNewsletterOptIn())));
+		given().contentType(ServiceTestingProperties.JSON_CONTENT_TYPE).and()
+				.post(ServiceTestingProperties.getUrlToPostData(testInput.getFirstName(), testInput.getLastName(),
+						testInput.getEmailAddress(), testInput.getEmailAddressConfirmation(),
+						String.valueOf(testInput.isNewsletterOptIn())));
 
-			when().get(ServiceTestingProperties.REST_API_URL).
+		when().get(ServiceTestingProperties.REST_API_URL).
 
-			then().statusCode(HTTP_OK).and().content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).and()
-					.content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
-		}
+		then().statusCode(HTTP_OK).and().content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).and()
+				.content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
+
 	}
 }
