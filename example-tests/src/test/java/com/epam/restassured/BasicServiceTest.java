@@ -48,7 +48,6 @@ public class BasicServiceTest {
 
 	@Test
 	public void addRecord() throws TestExecutionException {
-		// Setup verification data
 		listToVerifyEmail = new ArrayList<String>();
 		listToVerifyEmail.add(testInput.getEmailAddress());
 
