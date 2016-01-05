@@ -1,25 +1,21 @@
-package com.epam.restassured;
+package com.epam.restassured.pageobjects;
 
-import com.epam.restassured.pageobjects.ThankYouPageObject;
-import com.epam.restassured.util.AbstractDriver;
 import com.google.common.base.Verify;
-import org.openqa.selenium.WebDriver;
 
 /**
  *  Contains verification methods of {@ThankYouPageObject} the page.
  * Created by Peter_Olah1 on 12/10/2015.
  */
-public class ThankYouPageVerifier extends AbstractDriver {
-    private ThankYouPageObject thanksPage = new ThankYouPageObject(getDriver());
+public class ThankYouPageVerifier{
+    private ThankYouPagePageObject thanksPage;
 
     /**
      * Class constructor.
      *
-     * @param driver {@link WebDriver}}
      */
-    public ThankYouPageVerifier(WebDriver driver) {
-        super(driver);
-    }
+    public ThankYouPageVerifier(ThankYouPagePageObject thanksPage) {
+        this.thanksPage= thanksPage;
+         }
 
     /**
      *  Verifies that is the page sub header contains the user's email address.
@@ -28,7 +24,7 @@ public class ThankYouPageVerifier extends AbstractDriver {
      *
      */
     private void isSubTitleContainsEmail(String email) {
-        Verify.verify(thanksPage.getHeaderSubtitle().getText().contains(email));
+         Verify.verify(thanksPage.getHeaderSubtitle().getText().contains(email));
     }
 
     /**
@@ -38,7 +34,7 @@ public class ThankYouPageVerifier extends AbstractDriver {
      * @param email The displayed email address.
      */
     public void whenSubscribeFinishedCheckDataOnPage(String firstName, String email) {
-        Verify.verify(getDriver().getCurrentUrl().startsWith(
+        Verify.verify(thanksPage.getDriver().getCurrentUrl().startsWith(
                 "https://t7-f0x.rhcloud.com/subscription/thank-you.html?"));
         isHeaderContainsFirstName(firstName);
         isSubTitleContainsEmail(email);
