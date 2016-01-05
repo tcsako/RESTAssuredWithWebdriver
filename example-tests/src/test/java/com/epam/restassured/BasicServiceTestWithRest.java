@@ -72,9 +72,13 @@ public class BasicServiceTestWithRest {
         listToVerifyEmail.add(emailAddress);
         log.info("Initializing Firefox driver");
         log.info("Opening subscription page");
-      //  driver.get("https://t7-f0x.rhcloud.com/subscription/subscription.html");
     }
 
+    /**
+     * Performs a REST subscription then checks the data correctness.
+     *
+     * @throws Exception
+     */
     @Test
     public void addRecord() {
         given().contentType(ServiceTestingProperties.JSON_CONTENT_TYPE).
