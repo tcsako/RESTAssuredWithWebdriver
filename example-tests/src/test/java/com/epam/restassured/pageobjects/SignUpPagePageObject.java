@@ -6,7 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
- * Contains page elements, and webpage interaction methorsd.
+ * Contains page elements, and webpage interaction methods.
+ *
  * Created by Peter_Olah1 on 12/10/2015.
  */
 public class SignUpPagePageObject extends AbstractBasePage {
@@ -38,82 +39,16 @@ public class SignUpPagePageObject extends AbstractBasePage {
     @FindBy(id = "form")
     private WebElement signUpForm;
 
-    /**
-     * Class constructor.
-     *
-     * @param driver - {@link WebDriver}.
-     */
     public SignUpPagePageObject(WebDriver driver) {
         super(driver);
     }
 
-    /**
-     * Getter for web element.
-     *
-     * @return signUpForm
-     */
-    public WebElement getSignUpForm() {
-        return signUpForm;
-    }
-
-    /**
-     * Getter for web element.
-     *
-     * @return headerTitle
-     */
     public WebElement getHeaderTitle() {
         return headerTitle;
     }
 
-    /**
-     * Getter for web element.
-     *
-     * @return headerTitle
-     */
     public WebElement getSubHeaderTitle() {
         return subHeaderTitle;
-    }
-
-    /**
-     * Getter for web element.
-     *
-     * @return firstName
-     */
-    public WebElement getFirstName() {
-        return firstName;
-    }
-
-    /**
-     * Getter for web element.
-     *
-     * @return lastName
-     */
-    public WebElement getLastName() {
-        return lastName;
-    }
-
-    /**
-     * Getter for web element.
-     *
-     * @return emailAddress
-     */
-    public WebElement getEmailAddress() {
-        return emailAddress;
-    }
-
-    /**
-     * Getter for web element.
-     *
-     * @return confirmEmail
-     */
-
-    /**
-     * Getter for web element.
-     *
-     * @return submitButton
-     */
-    public WebElement getSubmitButton() {
-        return submitButton;
     }
 
     /**
@@ -189,6 +124,5 @@ public class SignUpPagePageObject extends AbstractBasePage {
 
         signUp(firstName, lastName, email, emailAgain, newsLetterCheckbox);
         submitButton.click();
-
     }
 }
