@@ -33,11 +33,11 @@ import static org.hamcrest.Matchers.is;
 /**
  * Represents an automated subscription to the newsletter with the {@link WebDriver} and REST validation.
  * Test data is read from a .CSV file.
- *
+ * <p/>
  * Created by Tamas_Csako
  */
 public class BasicServiceTestWithWebDriverAndRest {
-    private static Logger log = Logger.getLogger(BasicServiceTestWithWebDriverAndRest.class);
+    private static final Logger log = Logger.getLogger(BasicServiceTestWithWebDriverAndRest.class);
     private static final int NUMBER_OF_RESPONSE = 1;
     private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
     private static final String CONTENT_EMAIL_ADDRESS = "content.emailAddress";
@@ -48,8 +48,8 @@ public class BasicServiceTestWithWebDriverAndRest {
     private static final int HTTP_OK = HttpStatus.SC_OK;
     private static final String DEFAULT_TEST_INPUT_FILE = "test_data_rest_and_webdriver.csv";
     // CSV file header
-    private static final String[] DEFAULT_FILE_HEADER_MAPPING = { "firstName", "lastName", "emailAddress",
-            "emailAddressConfirmation", "newsletterOptIn" };
+    private static final String[] DEFAULT_FILE_HEADER_MAPPING = {"firstName", "lastName", "emailAddress",
+            "emailAddressConfirmation", "newsletterOptIn"};
     // Verification
     private List<String> listToVerifyEmail;
 
@@ -73,10 +73,10 @@ public class BasicServiceTestWithWebDriverAndRest {
         } else {
             log.info("Something went wrong! Existing records couldn't be deleted");
         }
-        
+
         log.info("Reading test data from CSV file");
-		testInput = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE,
-				DEFAULT_FILE_HEADER_MAPPING).get(0);
+        testInput = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE,
+                DEFAULT_FILE_HEADER_MAPPING).get(0);
 
         log.info("Setting up verification data");
         listToVerifyEmail = new ArrayList<String>();
@@ -112,8 +112,9 @@ public class BasicServiceTestWithWebDriverAndRest {
                 and().content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).
                 and().content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
     }
+
     /**
-     *  Closes the browser after test execution.
+     * Closes the browser after test execution.
      */
     @After
     public void tearDown() {

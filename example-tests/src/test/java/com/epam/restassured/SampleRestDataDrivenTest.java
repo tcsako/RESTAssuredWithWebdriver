@@ -25,8 +25,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Parameterized.class)
 public class SampleRestDataDrivenTest {
     private static final int HTTP_OK = HttpStatus.SC_OK;
-
-    private static Logger log = Logger.getLogger(SampleRestDataDrivenTest.class.getName());
+    private static final Logger log = Logger.getLogger(SampleRestDataDrivenTest.class.getName());
 
     @Parameterized.Parameter
     public int expectedNumberOfElements;
@@ -35,24 +34,24 @@ public class SampleRestDataDrivenTest {
     public int actualNumberOfElements;
 
     /**
-     *  Sets up the expected and actual parameters for the DDT methods.
+     * Sets up the expected and actual parameters for the DDT methods.
      *
      * @return A 2 dimension array.
      */
     @Parameterized.Parameters
     public static Collection<Object[]> testDataSet() {
-        return Arrays.asList(new Object[][] {
-                {1, 1 } ,
-                {1, 1 } ,
-                {1, 1 } ,
-                {1, 1 } ,
-                {1, 1 }
+        return Arrays.asList(new Object[][]{
+                {1, 1},
+                {1, 1},
+                {1, 1},
+                {1, 1},
+                {1, 1}
         });
     }
 
     /**
-     *  Sends a delete request to the given path. Deletes the existing entries
-     *  of subsrcibers.
+     * Sends a delete request to the given path. Deletes the existing entries
+     * of subsrcibers.
      *
      * @throws Exception
      */
@@ -68,8 +67,7 @@ public class SampleRestDataDrivenTest {
     }
 
     /**
-     *  Gets subsribers data and maps it to the {@link SubscriberResponse} and gets the response as string.
-     *
+     * Gets subsribers data and maps it to the {@link SubscriberResponse} and gets the response as string.
      */
     @Test
     public void getAllSubscribers() {
@@ -98,9 +96,8 @@ public class SampleRestDataDrivenTest {
     }
 
     /**
-     *  Creates a record with the data given in the URL, then gets subscriber data and
-     *  makes basic verifications for assure the correctness of the sent and stored data.
-     *
+     * Creates a record with the data given in the URL, then gets subscriber data and
+     * makes basic verifications for assure the correctness of the sent and stored data.
      */
     @Test
     public void addRecord() {
@@ -116,7 +113,6 @@ public class SampleRestDataDrivenTest {
 
     /**
      * Verifies the equality the number of the stored an the expected results.
-     *
      */
     @Test
     public void verifyResultNumber() {
