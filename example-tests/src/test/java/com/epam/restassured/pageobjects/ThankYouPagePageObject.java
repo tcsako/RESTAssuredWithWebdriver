@@ -7,7 +7,6 @@ import org.openqa.selenium.support.FindBy;
 /**
  * Represents a page object class with page elements, getters and setters.
  *
- *
  * @author Peter_Olah1
  *
  */
@@ -28,16 +27,10 @@ public class ThankYouPagePageObject extends AbstractBasePage {
         super(driver);
     }
 
-    /**
-     * @return HeaderSubtitle.
-     */
     public WebElement getHeaderSubtitle() {
         return headerSubtitle;
     }
 
-    /**
-     * @return HeaderTitle.
-     */
     public WebElement getHeaderTitle() {
         return headerTitle;
     }
