@@ -63,9 +63,9 @@ public class BasicServiceTestWithWebDriver {
 
 		baseURL = "https://t7-f0x.rhcloud.com/subscription/subscription.html";
 		
-        log.info("Setting up verification data");
         log.info("Initializing Firefox driver");
         driver = new FirefoxDriver();
+        
         log.info("Opening subscription page");
         driver.get(baseURL);
         signUpPagePageObject = new SignUpPagePageObject(driver);
