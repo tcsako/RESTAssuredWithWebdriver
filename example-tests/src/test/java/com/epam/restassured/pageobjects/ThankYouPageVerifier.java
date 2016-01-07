@@ -3,7 +3,8 @@ package com.epam.restassured.pageobjects;
 import com.google.common.base.Verify;
 
 /**
- *  Contains verification methods of {@ThankYouPageObject} the page.
+ *  Contains verification methods for the {@ThankYouPagePageObject} page.
+ *
  * Created by Peter_Olah1 on 12/10/2015.
  */
 public class ThankYouPageVerifier{
@@ -21,14 +22,13 @@ public class ThankYouPageVerifier{
      *  Verifies that is the page sub header contains the user's email address.
      *
      * @param email The user's email address.
-     *
      */
     private void isSubTitleContainsEmail(String email) {
          Verify.verify(thanksPage.getHeaderSubtitle().getText().contains(email));
     }
 
     /**
-     * Verifies that is the page sub header containing the user's email address.
+     * Verifies that the page sub header contains the user's email address.
      *
      * @param firstName The displayed first name.
      * @param email The displayed email address.
@@ -41,7 +41,7 @@ public class ThankYouPageVerifier{
     }
 
     /**
-     *  Verifies that is the page header containing the user's first name.
+     *  Verifies that the page header contains the user's first name.
      *
      * @param firstName The user's first name.
      */
@@ -49,5 +49,4 @@ public class ThankYouPageVerifier{
         Verify.verify(thanksPage.getHeaderTitle().getText()
                 .equals("Thank you " + firstName + "!"));
     }
-
 }
