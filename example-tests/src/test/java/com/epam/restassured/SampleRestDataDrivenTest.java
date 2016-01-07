@@ -41,7 +41,6 @@ public class SampleRestDataDrivenTest {
      */
     @Parameterized.Parameters
     public static Collection<Object[]> testDataSet() {
-        log.info("Setting up DDT data");
         return Arrays.asList(new Object[][] {
                 {1, 1 } ,
                 {1, 1 } ,
