@@ -21,23 +21,23 @@ import static com.jayway.restassured.RestAssured.given;
 /**
  * Represents an automated subscription to the newsletter with the {@link WebDriver}.
  * Test data is read from a .CSV file.
- * 
+ * <p/>
  * Created by Peter_Olah1 on 12/16/2015.
  */
 public class BasicServiceTestWithWebDriver {
 
     private Logger log = Logger.getLogger(BasicServiceTestWithWebDriver.class);
-    
+
     private CSVRestTestInput testInput;
-	// Default file name to read input data
+    // Default file name to read input data
     private static final int HTTP_OK = HttpStatus.SC_OK;
-	private static final String DEFAULT_TEST_INPUT_FILE = "test_data_webdriver.csv";
-	// CSV file header
-	private static final String[] DEFAULT_FILE_HEADER_MAPPING = { "firstName", "lastName", "emailAddress",
-			"emailAddressConfirmation", "newsletterOptIn" };
-	
-	private String baseURL;
-	private WebDriver driver;
+    private static final String DEFAULT_TEST_INPUT_FILE = "test_data_webdriver.csv";
+    // CSV file header
+    private static final String[] DEFAULT_FILE_HEADER_MAPPING = {"firstName", "lastName", "emailAddress",
+            "emailAddressConfirmation", "newsletterOptIn"};
+
+    private String baseURL;
+    private WebDriver driver;
     private SignUpPagePageObject signUpPagePageObject;
     private ThankYouPageVerifier thankYouPageVerifier;
     private SignUpPageVerifier signUpPageVerifier;
@@ -45,27 +45,26 @@ public class BasicServiceTestWithWebDriver {
 
     /**
      * Sets up test data and creates page object instances.
-     *
      */
     @Before
-    public void setUp() throws TestExecutionException  {
+    public void setUp() throws TestExecutionException {
 
-    	 log.info("Deleting existing records");
-         if (given().delete(ServiceTestingProperties.REST_API_URL).getStatusCode() == HTTP_OK) {
-             log.info("Records were deleted successfully");
-         } else {
-             log.info("Something went wrong! Existing records couldn't be deleted");
-         }
+        log.info("Deleting existing records");
+        if (given().delete(ServiceTestingProperties.REST_API_URL).getStatusCode() == HTTP_OK) {
+            log.info("Records were deleted successfully");
+        } else {
+            log.info("Something went wrong! Existing records couldn't be deleted");
+        }
 
         log.info("Reading test data from CSV file");
-		testInput = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE,
-				DEFAULT_FILE_HEADER_MAPPING).get(0);
+        testInput = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE,
+                DEFAULT_FILE_HEADER_MAPPING).get(0);
 
-		baseURL = "https://t7-f0x.rhcloud.com/subscription/subscription.html";
-		
+        baseURL = "https://t7-f0x.rhcloud.com/subscription/subscription.html";
+
         log.info("Initializing Firefox driver");
         driver = new FirefoxDriver();
-        
+
         log.info("Opening subscription page");
         driver.get(baseURL);
         signUpPagePageObject = new SignUpPagePageObject(driver);
@@ -73,11 +72,10 @@ public class BasicServiceTestWithWebDriver {
     }
 
     /**
-     *  Signs up with the given data. Makes basic verifications about the page display and elements behavior.
-     *
+     * Signs up with the given data. Makes basic verifications about the page display and elements behavior.
      */
     @Test
-    public void signUpSubscriber() throws TestExecutionException  {
+    public void signUpSubscriber() throws TestExecutionException {
 
         driver.get(baseURL);
         signUpPageVerifier.checkSignUpPageFields();
