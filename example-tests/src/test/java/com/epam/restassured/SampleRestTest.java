@@ -39,13 +39,13 @@ public class SampleRestTest {
     public void getAllSubscribers() {
         Response res = get(ServiceTestingProperties.REST_API_URL);
         SubscriberResponse subscriberResponse = res.as(SubscriberResponse.class);
-        System.out.println(res.asString());
+        log.info(res.asString());
         for (Content content : subscriberResponse.getContent()) {
-            System.out.println(content.getFirstName());
-            System.out.println(content.getLastName());
-            System.out.println(content.getEmailAddress());
-            System.out.println(content.getNewsletterOptIn());
-            System.out.println(content.getUuid());
+            log.info(content.getFirstName());
+            log.info(content.getLastName());
+            log.info(content.getEmailAddress());
+            log.info(content.getNewsletterOptIn());
+            log.info(content.getUuid());
         }
     }
 
@@ -53,7 +53,7 @@ public class SampleRestTest {
     @Ignore
     public void verifyOnlyOneRecord() {
 //		given().authentication().basic("username", "password");
-        when().get("https://t7-f0x.rhcloud.com/subscription/api/subscribers/?search=John").
+        when().get(ServiceTestingProperties.REST_API_URL + "?search=John").
                 then().content("numberOfElements", is(1));
     }
 
@@ -68,7 +68,7 @@ public class SampleRestTest {
 
     @Test
     public void verifyResultNumber() {
-        Response res = get("https://t7-f0x.rhcloud.com/subscription/api/subscribers/?search=John");
+        Response res = get(ServiceTestingProperties.REST_API_URL + "?search=John");
         JsonPath jp = new JsonPath(res.asString());
         assertEquals("Result number should be 1", 1, jp.getInt("numberOfElements"));
     }
