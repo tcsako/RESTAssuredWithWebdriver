@@ -2,14 +2,13 @@ package com.epam.restassured.pageobjects;
 
 
 import com.google.common.base.Verify;
-import org.openqa.selenium.WebDriver;
 
 /**
+ * Represents verification methods on the sign up page.
+ *
  * Created by Peter_Olah1 on 12/16/2015.
  */
 public class SignUpPageVerifier {
-    private static final String BASE_URL = "https://t7-f0x.rhcloud.com/subscription/subscription.html";
-    private WebDriver driver;
     private SignUpPagePageObject signUpPage;
 
     /**
@@ -37,14 +36,5 @@ public class SignUpPageVerifier {
      */
     public void checkSignUpPageFields() {
         signUpPage.signUpPageFieldDisplayTest();
-    }
-
-    /**
-     * Assures that the two email fields' values are equal.
-     *
-     * @throws AssertionError When the addresses are different.
-     */
-    public void emailVerification() throws AssertionError {
-     // TODO   Verify.verify(homePage.emailAddress().getText().equals(homePage.getConfirmEmail().getText()));
     }
 }
