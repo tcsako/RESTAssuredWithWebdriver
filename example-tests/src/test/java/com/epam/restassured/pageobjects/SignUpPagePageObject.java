@@ -1,14 +1,16 @@
 package com.epam.restassured.pageobjects;
 
-import com.google.common.base.Verify;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import com.epam.restassured.model.SignUpModel;
+import com.google.common.base.Verify;
+
 /**
  * Contains page elements, and webpage interaction methods.
  *
- * Created by Peter_Olah1 on 12/10/2015.
+ * @author Peter_Olah1
  */
 public class SignUpPagePageObject extends AbstractBasePage {
 
@@ -43,30 +45,6 @@ public class SignUpPagePageObject extends AbstractBasePage {
         super(driver);
     }
 
-    public WebElement getHeaderTitle() {
-        return headerTitle;
-    }
-
-    public WebElement getSubHeaderTitle() {
-        return subHeaderTitle;
-    }
-
-    /**
-     * @param element An editable field.
-     * @param fieldValue The value that you want to enter into the field.
-     */
-    private void fillField(WebElement element, String fieldValue) {
-        //TODO WebElemwnt wrapperbe
-        element.clear();
-        element.sendKeys(fieldValue);
-    }
-
-    /**
-     * Selects or deselects a checkbox.
-     *
-     * @param checkBox A checkbox WebElement.
-     * @param doYouWantToSelectCheckbox True if you want to tick a checkbox, false if you want to de
-     */
     //TODO WebElemwnt wrapperbe
     private void setCheckBoxValue(WebElement checkBox, boolean doYouWantToSelectCheckbox) {
         if (doYouWantToSelectCheckbox) {
@@ -81,48 +59,33 @@ public class SignUpPagePageObject extends AbstractBasePage {
     }
 
     /**
-     *  Verifies that the subscription page elements are visible and enabled.
+     * Verifies that the subscription page elements are visible and enabled.
      */
-    public void signUpPageFieldDisplayTest(){
+    public void signUpPageFieldDisplayTest() {
         Verify.verify(firstName.isDisplayed());
         Verify.verify(lastName.isDisplayed());
         Verify.verify(emailAddress.isDisplayed());
         Verify.verify(submitButton.isDisplayed());
     }
 
-    /**
-     *  Fills the subcription data fields.
-     *
-     * @param firstName First name of the subscriber.
-     * @param lastName Last name of the subscriber.
-     * @param email Email address of the subscriber.
-     * @param emailAgain Verification field for email field.
-     * @param newsLetterCheckbox Newsletter checkbox.
-     */
-    private void signUp(String firstName, String lastName, String email, String emailAgain,
-                        Boolean newsLetterCheckbox) {
-        fillField(this.firstName, firstName);
-        fillField(this.lastName, lastName);
-        fillField(this.emailAddress, email);
-        fillField(this.confirmEmail, emailAgain);
-        setCheckBoxValue(this.newsLetterCheckBox, newsLetterCheckbox);
+    public void signUp(SignUpModel model) {
+        fillSignUpForm(model);
+        submitButton.click();
     }
 
-    /**
-     *  Makes a subscription with the given data fields and assures that the user is on the correct page.
-     *
-     * @param firstName First name of the subscriber.
-     * @param lastName Last name of the subscriber.
-     * @param email Email address of the subscriber.
-     * @param emailAgain Verification field for email field.
-     * @param newsLetterCheckbox Newsletter checkbox.
-     * @return ThankYouPage instance
-     */
-    public void givenSignUp(String firstName, String lastName, String email,
-                                          String emailAgain,
-                                          Boolean newsLetterCheckbox) {
+    private void fillSignUpForm(SignUpModel model) {
+        fillField(this.firstName, model.getFirstName());
+        fillField(this.lastName, model.getLastName());
+        fillField(this.emailAddress, model.getEmail());
+        fillField(this.confirmEmail, model.getEmailConfirmation());
+        setCheckBoxValue(this.newsLetterCheckBox, model.getWantNewsletters());
+    }
 
-        signUp(firstName, lastName, email, emailAgain, newsLetterCheckbox);
-        submitButton.click();
+    public WebElement getHeaderTitle() {
+        return headerTitle;
+    }
+
+    public WebElement getSubHeaderTitle() {
+        return subHeaderTitle;
     }
 }

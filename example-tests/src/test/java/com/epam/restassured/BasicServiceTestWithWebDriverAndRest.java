@@ -8,12 +8,14 @@ package com.epam.restassured;
 //TODO: 6. create DDT script for webdriver script
 //TODO: 7. create rest script without BDD style (using JUnit asssertions)
 
-import com.epam.restassured.exception.TestExecutionException;
-import com.epam.restassured.pageobjects.SignUpPagePageObject;
-import com.epam.restassured.pageobjects.ThankYouPagePageObject;
-import com.epam.restassured.pageobjects.ThankYouPageVerifier;
-import com.epam.restassured.pojo.csv.CSVRestTestInput;
-import com.epam.restassured.csvreader.CSVReaderUtilitySingleton;
+import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.RestAssured.when;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
+import java.util.List;
+
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -22,41 +24,33 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import com.epam.restassured.csvreader.CSVReaderUtilitySingleton;
+import com.epam.restassured.exception.TestExecutionException;
+import com.epam.restassured.model.SignUpModel;
+import com.epam.restassured.pageobjects.SignUpPagePageObject;
+import com.epam.restassured.pageobjects.ThankYouPagePageObject;
+import com.epam.restassured.pageobjects.ThankYouPageVerifier;
+import com.epam.restassured.pojo.csv.CSVRestTestInput;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Represents an automated subscription to the newsletter with the {@link WebDriver} and REST validation.
  * Test data is read from a .CSV file.
- * <p/>
+ * <p>
  * Created by Tamas_Csako
  */
 public class BasicServiceTestWithWebDriverAndRest {
-    private static final Logger log = Logger.getLogger(BasicServiceTestWithWebDriverAndRest.class);
+    private static final Logger LOG = Logger.getLogger(BasicServiceTestWithWebDriverAndRest.class);
+
     private static final int NUMBER_OF_RESPONSE = 1;
     private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
     private static final String CONTENT_EMAIL_ADDRESS = "content.emailAddress";
 
-    // Test data
-    private CSVRestTestInput testInput;
-    // Default file name to read input data
-    private static final int HTTP_OK = HttpStatus.SC_OK;
     private static final String DEFAULT_TEST_INPUT_FILE = "test_data_rest_and_webdriver.csv";
-    // CSV file header
-    private static final String[] DEFAULT_FILE_HEADER_MAPPING = {"firstName", "lastName", "emailAddress",
-            "emailAddressConfirmation", "newsletterOptIn"};
-    // Verification
-    private List<String> listToVerifyEmail;
+    private static final List<String> DEFAULT_TEST_PARAMETERS = ImmutableList.of("firstName", "lastName", "emailAddress", "emailAddressConfirmation", "newsletterOptIn");
 
-    private SignUpPagePageObject signUpPagePageObject;
-    private ThankYouPagePageObject thankYouPagePageObject;
-    private ThankYouPageVerifier thankYouPageVerifier;
     private WebDriver driver;
+    private SignUpModel signUpModel;
 
     /**
      * Responsible for setting up test data and test environment.
@@ -66,28 +60,29 @@ public class BasicServiceTestWithWebDriverAndRest {
     @Before
     public void setUp() throws TestExecutionException {
 
-        log.info("*******************************************");
-        log.info("Deleting existing records");
-        if (given().delete(ServiceTestingProperties.REST_API_URL).getStatusCode() == HTTP_OK) {
-            log.info("Records were deleted successfully");
+        LOG.info("*******************************************");
+        LOG.info("Deleting existing records");
+        if (given().delete(ServiceTestingProperties.REST_API_URL).getStatusCode() == HttpStatus.SC_OK) {
+            LOG.info("Records were deleted successfully");
         } else {
-            log.info("Something went wrong! Existing records couldn't be deleted");
+            LOG.info("Something went wrong! Existing records couldn't be deleted");
         }
 
-        log.info("Reading test data from CSV file");
-        testInput = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE,
-                DEFAULT_FILE_HEADER_MAPPING).get(0);
-
-        log.info("Setting up verification data");
-        listToVerifyEmail = new ArrayList<String>();
-        listToVerifyEmail.add(testInput.getEmailAddress());
-
-        log.info("Initializing Firefox driver");
+        final List<CSVRestTestInput> testData = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE, DEFAULT_TEST_PARAMETERS);
+        if (!testData.isEmpty()) {
+            CSVRestTestInput testInput = testData.get(0);
+            signUpModel = SignUpModel.builder()
+                    .firstName(testInput.getFirstName())
+                    .lastName(testInput.getLastName())
+                    .email(testInput.getEmailAddress())
+                    .emailConfirmation(testInput.getEmailAddressConfirmation())
+                    .wantNewslettes(testInput.isNewsletterOptIn())
+                    .build();
+        }
+        LOG.info("Initializing Firefox driver");
         driver = new FirefoxDriver();
-
-        log.info("Opening subscription page");
+        LOG.info("Opening subscription page");
         driver.get("https://t7-f0x.rhcloud.com/subscription/subscription.html");
-        signUpPagePageObject = new SignUpPagePageObject(driver);
     }
 
     /**
@@ -97,20 +92,14 @@ public class BasicServiceTestWithWebDriverAndRest {
      */
     @Test
     public void addRecord() throws TestExecutionException {
+        new SignUpPagePageObject(driver).signUp(signUpModel);
+        ThankYouPageVerifier thankYouPageVerifier = new ThankYouPageVerifier(new ThankYouPagePageObject(driver));
+        thankYouPageVerifier.whenSubscribeFinishedCheckDataOnPage(signUpModel.getFirstName(), signUpModel.getEmail());
 
-        log.info("Filling fields and sending data");
-        signUpPagePageObject.givenSignUp(testInput.getFirstName(), testInput.getLastName(), testInput.getEmailAddress(),
-                testInput.getEmailAddressConfirmation(), Boolean.valueOf((testInput.isNewsletterOptIn())));
-        thankYouPagePageObject = new ThankYouPagePageObject(driver);
-
-        log.info("Checking 'Thank you' page URL, subscriber name and e-mail");
-        thankYouPageVerifier = new ThankYouPageVerifier(thankYouPagePageObject);
-        thankYouPageVerifier.whenSubscribeFinishedCheckDataOnPage(testInput.getFirstName(), testInput.getEmailAddress());
-
-        when().get(ServiceTestingProperties.REST_API_URL).
-                then().statusCode(HTTP_OK).
-                and().content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).
-                and().content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
+        when().get(ServiceTestingProperties.REST_API_URL)
+                .then().statusCode(HttpStatus.SC_OK)
+                .and().content(CONTENT_NUMBER_OF_ELEMENTS, is(equalTo(NUMBER_OF_RESPONSE)))
+                .and().content(CONTENT_EMAIL_ADDRESS, contains(signUpModel.getEmail()));
     }
 
     /**
