@@ -7,6 +7,7 @@ package com.epam.restassured;
 //TODO: 5. create DDT script for REST script
 //TODO: 6. create DDT script for webdriver script
 //TODO: 7. create rest script without BDD style (using JUnit asssertions)
+
 import com.epam.restassured.csvreader.CSVReaderUtilitySingleton;
 import com.epam.restassured.exception.TestExecutionException;
 import com.epam.restassured.pojo.csv.CSVRestTestInput;
@@ -24,22 +25,22 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 public class BasicServiceTest {
-    private static Logger log = Logger.getLogger(BasicServiceTest.class);
-	private static final int NUMBER_OF_RESPONSE = 1;
-	private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
-	private static final String CONTENT_EMAIL_ADDRESS = "content.emailAddress";
-	private static final int HTTP_OK = HttpStatus.SC_OK;
-	// Default file name to read input data
-	private static final String DEFAULT_TEST_INPUT_FILE = "test_data_rest.csv";
-	// CSV file header
-	private static final String[] DEFAULT_FILE_HEADER_MAPPING = { "firstName", "lastName", "emailAddress",
-			"emailAddressConfirmation", "newsletterOptIn" };
+    private static final Logger log = Logger.getLogger(BasicServiceTest.class);
+    private static final int NUMBER_OF_RESPONSE = 1;
+    private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
+    private static final String CONTENT_EMAIL_ADDRESS = "content.emailAddress";
+    private static final int HTTP_OK = HttpStatus.SC_OK;
+    // Default file name to read input data
+    private static final String DEFAULT_TEST_INPUT_FILE = "test_data_rest.csv";
+    // CSV file header
+    private static final String[] DEFAULT_FILE_HEADER_MAPPING = {"firstName", "lastName", "emailAddress",
+            "emailAddressConfirmation", "newsletterOptIn"};
 
-	private List<String> listToVerifyEmail;
-	private CSVRestTestInput testInput;
+    private List<String> listToVerifyEmail;
+    private CSVRestTestInput testInput;
 
-	@Before
-	public void setUp() throws TestExecutionException {
+    @Before
+    public void setUp() throws TestExecutionException {
 
         log.info("*******************************************");
         log.info("Deleting existing records");
@@ -50,27 +51,27 @@ public class BasicServiceTest {
         }
 
         log.info("Reading test data from CSV file");
-		testInput = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE,
-				DEFAULT_FILE_HEADER_MAPPING).get(0);
-	}
+        testInput = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE,
+                DEFAULT_FILE_HEADER_MAPPING).get(0);
+    }
 
-	@Test
-	public void addRecord() throws TestExecutionException {
+    @Test
+    public void addRecord() throws TestExecutionException {
 
         log.info("Creating test data container");
-		listToVerifyEmail = new ArrayList<String>();
+        listToVerifyEmail = new ArrayList<String>();
 
         log.info("Adding test data to test data container");
-		listToVerifyEmail.add(testInput.getEmailAddress());
+        listToVerifyEmail.add(testInput.getEmailAddress());
 
-		given().contentType(ServiceTestingProperties.JSON_CONTENT_TYPE).and()
-				.post(ServiceTestingProperties.getUrlToPostData(testInput.getFirstName(), testInput.getLastName(),
-						testInput.getEmailAddress(), testInput.getEmailAddressConfirmation(),
-						String.valueOf(testInput.isNewsletterOptIn())));
+        given().contentType(ServiceTestingProperties.JSON_CONTENT_TYPE).and()
+                .post(ServiceTestingProperties.getUrlToPostData(testInput.getFirstName(), testInput.getLastName(),
+                        testInput.getEmailAddress(), testInput.getEmailAddressConfirmation(),
+                        String.valueOf(testInput.isNewsletterOptIn())));
 
-		when().get(ServiceTestingProperties.REST_API_URL).
+        when().get(ServiceTestingProperties.REST_API_URL).
 
-		then().statusCode(HTTP_OK).and().content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).and()
-				.content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
-	}
+                then().statusCode(HTTP_OK).and().content(CONTENT_NUMBER_OF_ELEMENTS, is(NUMBER_OF_RESPONSE)).and()
+                .content(CONTENT_EMAIL_ADDRESS, equalTo(listToVerifyEmail));
+    }
 }

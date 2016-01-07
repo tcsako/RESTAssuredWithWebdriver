@@ -26,7 +26,7 @@ import static com.jayway.restassured.RestAssured.given;
  */
 public class BasicServiceTestWithWebDriver {
 
-    private Logger log = Logger.getLogger(BasicServiceTestWithWebDriver.class);
+    private static final Logger log = Logger.getLogger(BasicServiceTestWithWebDriver.class);
 
     private CSVRestTestInput testInput;
     // Default file name to read input data
