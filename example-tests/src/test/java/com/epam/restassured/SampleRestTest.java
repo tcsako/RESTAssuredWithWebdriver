@@ -22,8 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 public class SampleRestTest {
     private static final int HTTP_OK = HttpStatus.SC_OK;
-
-    private static Logger log = Logger.getLogger(SampleRestDataDrivenTest.class.getName());
+    private static final Logger log = Logger.getLogger(SampleRestDataDrivenTest.class.getName());
 
     @Before
     public void setUp() throws TestExecutionException {
