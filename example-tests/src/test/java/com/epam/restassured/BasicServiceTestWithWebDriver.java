@@ -78,10 +78,11 @@ public class BasicServiceTestWithWebDriver {
      */
     @Test
     public void signUpSubscriber() throws TestExecutionException  {
+
         driver.get(baseURL);
         signUpPageVerifier.checkSignUpPageFields();
         signUpPageVerifier.checkSignUpPageHeaders();
-        signUpPagePageObject.givenSignUp(testInput.getFirstName(), testInput.getLastName(), testInput.getEmailAddress(), testInput.getEmailAddressConfirmation(), Boolean.valueOf((testInput.isNewsletterOptIn())));
+        signUpPagePageObject.givenSignUp(testInput.getFirstName(), testInput.getLastName(), testInput.getEmailAddress(), testInput.getEmailAddressConfirmation(), Boolean.valueOf(testInput.isNewsletterOptIn()));
         thankYouPage = new ThankYouPagePageObject(driver);
         thankYouPageVerifier = new ThankYouPageVerifier(thankYouPage);
         thankYouPageVerifier.whenSubscribeFinishedCheckDataOnPage(testInput.getFirstName(), testInput.getEmailAddress());
