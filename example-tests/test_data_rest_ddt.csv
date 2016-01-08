@@ -1,0 +1,6 @@
+#firstName,lastName,emailAddress,emailAddressConfirmation,newsletterOptIn
+John,Doe,johndoe@freecloud.com,johndoe@freecloud.com,true
+Ronald,Smith,ronald@freecloud.com,ronald@freecloud.com,true
+Emily,Meyer,emily@freecloud.com,emily@freecloud.com,true
+Alex,Monroe,alex@freecloud.com,alex@freecloud.com,true
+Martin,Bot,martin@freecloud.com,martin@freecloud.com,true
