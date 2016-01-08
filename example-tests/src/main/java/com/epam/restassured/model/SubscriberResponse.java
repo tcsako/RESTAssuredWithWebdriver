@@ -1,4 +1,4 @@
-package com.epam.restassured.pojo;
+package com.epam.restassured.model;
 
 import java.util.List;
 
