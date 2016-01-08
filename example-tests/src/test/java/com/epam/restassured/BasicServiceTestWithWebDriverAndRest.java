@@ -8,8 +8,6 @@ package com.epam.restassured;
 //TODO: 6. create DDT script for webdriver script
 //TODO: 7. create rest script without BDD style (using JUnit asssertions)
 
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -31,6 +29,7 @@ import com.epam.restassured.pageobjects.SignUpPagePageObject;
 import com.epam.restassured.pageobjects.ThankYouPagePageObject;
 import com.epam.restassured.pageobjects.ThankYouPageVerifier;
 import com.epam.restassured.pojo.csv.CSVRestTestInput;
+import com.epam.restassured.service.client.SubscriberServiceClient;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -51,6 +50,7 @@ public class BasicServiceTestWithWebDriverAndRest {
 
     private WebDriver driver;
     private SignUpModel signUpModel;
+    private SubscriberServiceClient subscriberServiceClient;
 
     /**
      * Responsible for setting up test data and test environment.
@@ -59,14 +59,8 @@ public class BasicServiceTestWithWebDriverAndRest {
      */
     @Before
     public void setUp() throws TestExecutionException {
-
-        LOG.info("*******************************************");
-        LOG.info("Deleting existing records");
-        if (given().delete(ServiceTestingProperties.REST_API_URL).getStatusCode() == HttpStatus.SC_OK) {
-            LOG.info("Records were deleted successfully");
-        } else {
-            LOG.info("Something went wrong! Existing records couldn't be deleted");
-        }
+        subscriberServiceClient = new SubscriberServiceClient();
+        subscriberServiceClient.deleteSubscribers();
 
         final List<CSVRestTestInput> testData = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE, DEFAULT_TEST_PARAMETERS);
         if (!testData.isEmpty()) {
@@ -76,7 +70,7 @@ public class BasicServiceTestWithWebDriverAndRest {
                     .lastName(testInput.getLastName())
                     .email(testInput.getEmailAddress())
                     .emailConfirmation(testInput.getEmailAddressConfirmation())
-                    .wantNewslettes(testInput.isNewsletterOptIn())
+                    .wantNewsletters(testInput.isNewsletterOptIn())
                     .build();
         }
         LOG.info("Initializing Firefox driver");
@@ -96,7 +90,7 @@ public class BasicServiceTestWithWebDriverAndRest {
         ThankYouPageVerifier thankYouPageVerifier = new ThankYouPageVerifier(new ThankYouPagePageObject(driver));
         thankYouPageVerifier.whenSubscribeFinishedCheckDataOnPage(signUpModel.getFirstName(), signUpModel.getEmail());
 
-        when().get(ServiceTestingProperties.REST_API_URL)
+        subscriberServiceClient.getSubscribers()
                 .then().statusCode(HttpStatus.SC_OK)
                 .and().content(CONTENT_NUMBER_OF_ELEMENTS, is(equalTo(NUMBER_OF_RESPONSE)))
                 .and().content(CONTENT_EMAIL_ADDRESS, contains(signUpModel.getEmail()));

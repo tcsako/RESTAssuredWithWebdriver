@@ -94,7 +94,7 @@ public final class SignUpModel {
             return this;
         }
 
-        public Builder wantNewslettes(boolean wantNewsletters) {
+        public Builder wantNewsletters(boolean wantNewsletters) {
             this.wantNewsletters = wantNewsletters;
             return this;
         }

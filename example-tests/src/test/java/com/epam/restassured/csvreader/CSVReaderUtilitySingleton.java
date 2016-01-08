@@ -66,8 +66,7 @@ public final class CSVReaderUtilitySingleton {
                     .parse(new FileReader(fileName));
             return streamOf(records).map(record -> convertInput(record, fileHeaderMapping)).collect(toList());
         } catch (IOException e) {
-            // TODO: use Log4j for logging
-            throw new TestExecutionException(e.getMessage());
+            throw new TestExecutionException("Failed to read test input", e);
         }
     }
 

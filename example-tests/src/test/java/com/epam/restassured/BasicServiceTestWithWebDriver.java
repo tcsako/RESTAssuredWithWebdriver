@@ -1,10 +1,7 @@
 package com.epam.restassured;
 
-import static com.jayway.restassured.RestAssured.given;
-
 import java.util.List;
 
-import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -13,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import com.epam.restassured.csvreader.CSVReaderUtilitySingleton;
+import com.epam.restassured.env.EnvironmentProvider;
 import com.epam.restassured.exception.TestExecutionException;
 import com.epam.restassured.model.SignUpModel;
 import com.epam.restassured.pageobjects.SignUpPagePageObject;
@@ -20,6 +18,9 @@ import com.epam.restassured.pageobjects.SignUpPageVerifier;
 import com.epam.restassured.pageobjects.ThankYouPagePageObject;
 import com.epam.restassured.pageobjects.ThankYouPageVerifier;
 import com.epam.restassured.pojo.csv.CSVRestTestInput;
+import com.epam.restassured.service.client.SubscriberServiceClient;
+import com.epam.restassured.url.SignUpPathProvider;
+import com.epam.restassured.url.UrlBuilder;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -31,6 +32,7 @@ import com.google.common.collect.ImmutableList;
 public class BasicServiceTestWithWebDriver {
     private static final Logger LOG = Logger.getLogger(BasicServiceTestWithWebDriver.class);
 
+    private static final String BASE_URL_PROPERTY = "BASE_URL";
     private static final String DEFAULT_TEST_INPUT_FILE = "test_data_webdriver.csv";
     private static final List<String> DEFAULT_TEST_PARAMETERS = ImmutableList.of("firstName", "lastName", "emailAddress", "emailAddressConfirmation", "newsletterOptIn");
 
@@ -44,14 +46,8 @@ public class BasicServiceTestWithWebDriver {
      */
     @Before
     public void setUp() throws TestExecutionException {
-        LOG.info("Deleting existing records");
-        if (given().delete(ServiceTestingProperties.REST_API_URL).getStatusCode() == HttpStatus.SC_OK) {
-            LOG.info("Records were deleted successfully");
-        } else {
-            LOG.info("Something went wrong! Existing records couldn't be deleted");
-        }
+        new SubscriberServiceClient().deleteSubscribers();
 
-        LOG.info("Reading test data from CSV file");
         final List<CSVRestTestInput> testData = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE, DEFAULT_TEST_PARAMETERS);
         if (!testData.isEmpty()) {
             CSVRestTestInput testInput = testData.get(0);
@@ -60,14 +56,14 @@ public class BasicServiceTestWithWebDriver {
                     .lastName(testInput.getLastName())
                     .email(testInput.getEmailAddress())
                     .emailConfirmation(testInput.getEmailAddressConfirmation())
-                    .wantNewslettes(testInput.isNewsletterOptIn())
+                    .wantNewsletters(testInput.isNewsletterOptIn())
                     .build();
         }
 
-        LOG.info("Initializing Firefox driver");
         driver = new FirefoxDriver();
-        LOG.info("Opening subscription page");
-        driver.get("https://t7-f0x.rhcloud.com/subscription/subscription.html");
+        UrlBuilder urlBuilder = new UrlBuilder(new EnvironmentProvider().get().get(BASE_URL_PROPERTY));
+        urlBuilder.buildUriFor(new SignUpPathProvider());
+        driver.get(urlBuilder.buildUriFor(new SignUpPathProvider()));
 
         signUpPagePageObject = new SignUpPagePageObject(driver);
         signUpPageVerifier = new SignUpPageVerifier(signUpPagePageObject);
