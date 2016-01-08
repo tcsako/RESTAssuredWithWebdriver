@@ -10,7 +10,6 @@ import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -22,11 +21,23 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Represents a rest test with stored record's number verification. 
+ * 
+ * @author Tamas_Csako
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SampleRestTest {
     private static final int HTTP_OK = HttpStatus.SC_OK;
-    private static final Logger log = Logger.getLogger(SampleRestDataDrivenTest.class.getName());
+    private static final Logger log = Logger.getLogger(SampleRestTest.class.getName());
 
+    
+    /**
+     * Deletes the existing record(s) before running the test methods.
+     * 
+     * @throws TestExecutionException
+     */
     @BeforeClass
     public static void setUp() throws TestExecutionException {
         log.info("*************************");
@@ -38,6 +49,9 @@ public class SampleRestTest {
         }
     }
 
+    /**
+     * Gets the data of the existing records for later verification.
+     */
     @Test
     public void getAllSubscribers() {
         Response res = get(ServiceTestingProperties.REST_API_URL);
@@ -52,13 +66,17 @@ public class SampleRestTest {
         }
     }
 
+    /**
+     * Sends a get request with the specified string and gets the result(s) number.
+     */
     @Test
-    @Ignore
     public void verifyOnlyOneRecord() {
-        // given().authentication().basic("username", "password");
-        when().get(ServiceTestingProperties.REST_API_URL + "?search=John").then().content("numberOfElements", is(1));
+        when().get(ServiceTestingProperties.REST_API_URL + "?search=Beluska").then().content("numberOfElements", is(1));
     }
 
+    /**
+     * Adds a record to the database with the specified data.
+     */
     @Test
     public void addRecord() {
         List<String> listToVerifyEmail = new ArrayList<String>();
@@ -69,6 +87,9 @@ public class SampleRestTest {
                 .and().content("content.emailAddress", equalTo(listToVerifyEmail));
     }
 
+    /**
+     * Sends a get request and performs a record number verification.
+     */
     @Test
     public void verifyResultNumber() {
         Response res = get(ServiceTestingProperties.REST_API_URL + "?search=Beluska");
