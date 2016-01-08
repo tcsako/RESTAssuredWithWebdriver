@@ -6,10 +6,11 @@ import com.epam.restassured.pojo.SubscriberResponse;
 import com.jayway.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.junit.runners.Parameterized;
 
 import java.util.ArrayList;
@@ -22,7 +23,14 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Represents a data driven test with verification of the number of records. 
+ * 
+ * @author Tamas_Csako & Peter_Olah1
+ *
+ */
 @RunWith(Parameterized.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SampleRestDataDrivenTest {
     private static final int HTTP_OK = HttpStatus.SC_OK;
     private static final Logger log = Logger.getLogger(SampleRestDataDrivenTest.class.getName());
@@ -53,10 +61,10 @@ public class SampleRestDataDrivenTest {
      * Sends a delete request to the given path. Deletes the existing entries
      * of subsrcibers.
      *
-     * @throws Exception
+     * @throws TestExecutionException
      */
-    @Before
-    public void setUp() throws TestExecutionException {
+    @BeforeClass
+    public static void setUp() throws TestExecutionException {
         log.info("*************************");
         log.info("Deleting existing records");
         if (given().delete(ServiceTestingProperties.REST_API_URL).getStatusCode() == HTTP_OK) {
@@ -87,12 +95,9 @@ public class SampleRestDataDrivenTest {
      * Basic verification among the number of existing and the expected records.
      */
     @Test
-    @Ignore
     public void verifyOnlyOneRecord() {
-        // given().authentication().basic("username", "password");
-        when().get(ServiceTestingProperties.REST_API_URL + "?search=John").
+        when().get(ServiceTestingProperties.REST_API_URL + "?search=Beluska").
                 then().content("numberOfElements", is(expectedNumberOfElements));
-        //TODO felgöngyölíteni az ügyet
     }
 
     /**
@@ -112,7 +117,7 @@ public class SampleRestDataDrivenTest {
     }
 
     /**
-     * Verifies the equality the number of the stored an the expected results.
+     * Verifies the equality of the number of the stored and the expected results.
      */
     @Test
     public void verifyResultNumber() {
