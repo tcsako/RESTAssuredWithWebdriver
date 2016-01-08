@@ -1,4 +1,4 @@
-package com.epam.restassured.pojo.csv;
+package com.epam.restassured.csvreader.model;
 
 /**
  * POJO to handle test input data come from CSV file.
@@ -6,7 +6,7 @@ package com.epam.restassured.pojo.csv;
  * @author Tamas_Csako
  *
  */
-public class CSVRestTestInput {
+public class CSVRestTestInputModel {
 	private String firstName;
 	private String lastName;
 	private String emailAddress;
@@ -22,7 +22,7 @@ public class CSVRestTestInput {
 	 * @param emailAddressConfirmation
 	 * @param newsletterOptIn
 	 */
-	private CSVRestTestInput(CSVRestTestInputBuilder builder) {
+	private CSVRestTestInputModel(CSVRestTestInputBuilder builder) {
 		this.firstName = builder.firstName;
 		this.lastName = builder.lastName;
 		this.emailAddress = builder.emailAddress;
@@ -111,8 +111,8 @@ public class CSVRestTestInput {
 			return this;
 		}
 
-		public CSVRestTestInput build() {
-			return new CSVRestTestInput(this);
+		public CSVRestTestInputModel build() {
+			return new CSVRestTestInputModel(this);
 		}
 	}
 

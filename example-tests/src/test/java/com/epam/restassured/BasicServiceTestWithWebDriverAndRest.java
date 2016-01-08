@@ -23,12 +23,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import com.epam.restassured.csvreader.CSVReaderUtilitySingleton;
+import com.epam.restassured.csvreader.model.CSVRestTestInputModel;
 import com.epam.restassured.exception.TestExecutionException;
 import com.epam.restassured.model.SignUpModel;
 import com.epam.restassured.pageobjects.SignUpPagePageObject;
 import com.epam.restassured.pageobjects.ThankYouPagePageObject;
 import com.epam.restassured.pageobjects.ThankYouPageVerifier;
-import com.epam.restassured.pojo.csv.CSVRestTestInput;
 import com.epam.restassured.service.client.SubscriberServiceClient;
 import com.google.common.collect.ImmutableList;
 
@@ -62,9 +62,9 @@ public class BasicServiceTestWithWebDriverAndRest {
         subscriberServiceClient = new SubscriberServiceClient();
         subscriberServiceClient.deleteSubscribers();
 
-        final List<CSVRestTestInput> testData = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE, DEFAULT_TEST_PARAMETERS);
+        final List<CSVRestTestInputModel> testData = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE, DEFAULT_TEST_PARAMETERS);
         if (!testData.isEmpty()) {
-            CSVRestTestInput testInput = testData.get(0);
+            CSVRestTestInputModel testInput = testData.get(0);
             signUpModel = SignUpModel.builder()
                     .firstName(testInput.getFirstName())
                     .lastName(testInput.getLastName())

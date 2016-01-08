@@ -11,21 +11,18 @@ import static org.hamcrest.Matchers.is;
 import java.util.List;
 
 import org.apache.http.HttpStatus;
-import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.epam.restassured.csvreader.CSVReaderUtilitySingleton;
+import com.epam.restassured.csvreader.model.CSVRestTestInputModel;
 import com.epam.restassured.exception.TestExecutionException;
 import com.epam.restassured.model.SignUpModel;
-import com.epam.restassured.pojo.csv.CSVRestTestInput;
 import com.epam.restassured.service.client.SignUpServiceClient;
 import com.epam.restassured.service.client.SubscriberServiceClient;
 import com.google.common.collect.ImmutableList;
 
 public class BasicServiceTest {
-    private static final Logger LOG = Logger.getLogger(BasicServiceTest.class);
-
     private static final int NUMBER_OF_RESPONSE = 1;
     private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
     private static final String CONTENT_EMAIL_ADDRESS = "content.emailAddress";
@@ -42,9 +39,9 @@ public class BasicServiceTest {
         subscriberServiceClient = new SubscriberServiceClient();
         subscriberServiceClient.deleteSubscribers();
 
-        final List<CSVRestTestInput> testData = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE, DEFAULT_TEST_PARAMETERS);
+        final List<CSVRestTestInputModel> testData = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE, DEFAULT_TEST_PARAMETERS);
         if (!testData.isEmpty()) {
-            CSVRestTestInput testInput = testData.get(0);
+            CSVRestTestInputModel testInput = testData.get(0);
             signUpModel = SignUpModel.builder()
                     .firstName(testInput.getFirstName())
                     .lastName(testInput.getLastName())

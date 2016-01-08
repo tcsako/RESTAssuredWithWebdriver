@@ -7,7 +7,6 @@ import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 
 import com.epam.restassured.env.EnvironmentProvider;
-import com.epam.restassured.url.PathProvider;
 import com.epam.restassured.url.SubscribersPathProvider;
 import com.epam.restassured.url.UrlBuilder;
 import com.google.common.collect.ImmutableMap;
@@ -16,8 +15,7 @@ import com.jayway.restassured.response.Response;
 public class SubscriberServiceClient {
     private static final Logger LOG = Logger.getLogger(SubscriberServiceClient.class);
 
-    private final UrlBuilder urlBuilder = new UrlBuilder(new EnvironmentProvider().get().get("BASE_URL"));
-    private PathProvider pathProvider = new SubscribersPathProvider();
+    private final UrlBuilder urlBuilder = new UrlBuilder(new EnvironmentProvider().get().get("BASE_URL")).forPath(new SubscribersPathProvider().get());
 
     public Response getSubscribers() {
         return get(getSubscriberServiceUrl());
@@ -43,6 +41,6 @@ public class SubscriberServiceClient {
     }
 
     private UrlBuilder getSubscriberServiceUrlBuilder() {
-        return urlBuilder.forPath(pathProvider.get());
+        return urlBuilder;
     }
 }

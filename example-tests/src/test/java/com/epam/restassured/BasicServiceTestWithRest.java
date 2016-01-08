@@ -13,7 +13,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import org.apache.http.HttpStatus;
-import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +21,6 @@ import com.epam.restassured.service.client.SignUpServiceClient;
 import com.epam.restassured.service.client.SubscriberServiceClient;
 
 public class BasicServiceTestWithRest {
-    private static final Logger LOG = Logger.getLogger(BasicServiceTestWithRest.class);
 
     private static final int NUMBER_OF_RESPONSE = 1;
     private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";

@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.epam.restassured.exception.TestExecutionException;
 import com.epam.restassured.model.SignUpModel;
-import com.epam.restassured.pojo.SubscriberResponse;
+import com.epam.restassured.model.SubscriberResponse;
 import com.epam.restassured.service.client.SignUpServiceClient;
 import com.epam.restassured.service.client.SubscriberServiceClient;
 import com.jayway.restassured.response.Response;

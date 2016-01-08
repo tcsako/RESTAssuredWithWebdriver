@@ -13,8 +13,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.log4j.Logger;
 
+import com.epam.restassured.csvreader.model.CSVRestTestInputModel;
 import com.epam.restassured.exception.TestExecutionException;
-import com.epam.restassured.pojo.csv.CSVRestTestInput;
 
 /**
  * Singleton representation of a CSV Reader utility class.
@@ -56,7 +56,7 @@ public final class CSVReaderUtilitySingleton {
      * @return list of input data in CSVTestInput format
      * @throws TestExecutionException exception to handle issues during reading
      */
-    public List<CSVRestTestInput> getIntput(String fileName, List<String> fileHeaderMapping) throws TestExecutionException {
+    public List<CSVRestTestInputModel> getIntput(String fileName, List<String> fileHeaderMapping) throws TestExecutionException {
         try {
             requireNonNull(fileName);
             requireNonNull(fileHeaderMapping);
@@ -80,8 +80,8 @@ public final class CSVReaderUtilitySingleton {
      * @param record one line from CSV file
      * @return converted test input data in CSVRestTestInput pojo
      */
-    private CSVRestTestInput convertInput(CSVRecord record, List<String> fileHeaderMapping) {
-        return new CSVRestTestInput.CSVRestTestInputBuilder()
+    private CSVRestTestInputModel convertInput(CSVRecord record, List<String> fileHeaderMapping) {
+        return new CSVRestTestInputModel.CSVRestTestInputBuilder()
                 .firstName(record.get(fileHeaderMapping.get(0)))
                 .lastName(record.get(fileHeaderMapping.get(1)))
                 .emailAddress(record.get(fileHeaderMapping.get(2)))
