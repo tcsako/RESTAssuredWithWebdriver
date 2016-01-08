@@ -1,5 +1,6 @@
-package com.epam.restassured.pageobjects;
+package com.epam.restassured.verify;
 
+import com.epam.restassured.pageobjects.ThankYouPagePageObject;
 import com.google.common.base.Verify;
 
 /**
