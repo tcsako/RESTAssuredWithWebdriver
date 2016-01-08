@@ -14,10 +14,10 @@ import com.epam.restassured.csvreader.model.CSVRestTestInputModel;
 import com.epam.restassured.env.EnvironmentProvider;
 import com.epam.restassured.exception.TestExecutionException;
 import com.epam.restassured.model.SignUpModel;
-import com.epam.restassured.pageobjects.SignUpPagePageObject;
-import com.epam.restassured.pageobjects.SignUpPageVerifier;
-import com.epam.restassured.pageobjects.ThankYouPagePageObject;
-import com.epam.restassured.pageobjects.ThankYouPageVerifier;
+import com.epam.restassured.pageobjects.NewsletterSignUpPageObject;
+import com.epam.restassured.pageobjects.SignUpConfirmationPageObject;
+import com.epam.restassured.pageobjects.verifier.NewsletterSignUpPageVerifier;
+import com.epam.restassured.pageobjects.verifier.SignUpConfirmationPageVerifier;
 import com.epam.restassured.service.client.SubscriberServiceClient;
 import com.epam.restassured.url.SignUpPathProvider;
 import com.epam.restassured.url.UrlBuilder;
@@ -37,8 +37,8 @@ public class BasicServiceTestWithWebDriver {
     private static final List<String> DEFAULT_TEST_PARAMETERS = ImmutableList.of("firstName", "lastName", "emailAddress", "emailAddressConfirmation", "newsletterOptIn");
 
     private WebDriver driver;
-    private SignUpPagePageObject signUpPagePageObject;
-    private SignUpPageVerifier signUpPageVerifier;
+    private NewsletterSignUpPageObject newsletterSignUpPageObject;
+    private NewsletterSignUpPageVerifier newsletterSignUpPageVerifier;
     private SignUpModel signUpModel;
 
     /**
@@ -46,6 +46,7 @@ public class BasicServiceTestWithWebDriver {
      */
     @Before
     public void setUp() throws TestExecutionException {
+    	LOG.info("Starting Before method in " + this.toString());
         new SubscriberServiceClient().deleteSubscribers();
 
         final List<CSVRestTestInputModel> testData = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE, DEFAULT_TEST_PARAMETERS);
@@ -64,20 +65,23 @@ public class BasicServiceTestWithWebDriver {
         UrlBuilder urlBuilder = new UrlBuilder(new EnvironmentProvider().get().get(BASE_URL_PROPERTY));
         driver.get(urlBuilder.buildUriFor(new SignUpPathProvider()));
 
-        signUpPagePageObject = new SignUpPagePageObject(driver);
-        signUpPageVerifier = new SignUpPageVerifier(signUpPagePageObject);
+        newsletterSignUpPageObject = new NewsletterSignUpPageObject(driver);
+        newsletterSignUpPageVerifier = new NewsletterSignUpPageVerifier(newsletterSignUpPageObject);
+    	LOG.info("Before has been finished in " + this.toString());
     }
 
     /**
      * Signs up with the given data. Makes basic verifications about the page display and elements behavior.
      */
     @Test
-    public void signUpSubscriber() throws TestExecutionException {
-        signUpPageVerifier.checkSignUpPageFields();
-        signUpPageVerifier.checkSignUpPageHeaders();
-        signUpPagePageObject.signUp(signUpModel);
-        ThankYouPageVerifier thankYouPageVerifier = new ThankYouPageVerifier(new ThankYouPagePageObject(driver));
+    public void shouldSubscribe() throws TestExecutionException {
+    	LOG.info("Starting test script " + this.toString());
+    	newsletterSignUpPageVerifier.givenSignUpPageFieldsDisplayed();
+    	newsletterSignUpPageVerifier.givenSignUpPageHeadersDisplayed();
+        newsletterSignUpPageObject.whenSignUp(signUpModel);
+        SignUpConfirmationPageVerifier thankYouPageVerifier = new SignUpConfirmationPageVerifier(new SignUpConfirmationPageObject(driver));
         thankYouPageVerifier.whenSubscribeFinishedCheckDataOnPage(signUpModel.getFirstName(), signUpModel.getEmail());
+    	LOG.info("Test script has been finished in " + this.toString());
     }
 
     /**
@@ -85,10 +89,11 @@ public class BasicServiceTestWithWebDriver {
      */
     @After
     public void tearDown() {
-        LOG.info("Closing browser");
+        LOG.info("Starting After in" + this.toString() + "to close browser");
         if (driver != null) {
             driver.quit();
         }
+    	LOG.info("After has been finished in " + this.toString());
     }
 }
 

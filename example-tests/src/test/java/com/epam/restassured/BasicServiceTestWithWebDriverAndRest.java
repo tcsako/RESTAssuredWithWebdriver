@@ -26,9 +26,9 @@ import com.epam.restassured.csvreader.CSVReaderUtilitySingleton;
 import com.epam.restassured.csvreader.model.CSVRestTestInputModel;
 import com.epam.restassured.exception.TestExecutionException;
 import com.epam.restassured.model.SignUpModel;
-import com.epam.restassured.pageobjects.SignUpPagePageObject;
-import com.epam.restassured.pageobjects.ThankYouPagePageObject;
-import com.epam.restassured.pageobjects.ThankYouPageVerifier;
+import com.epam.restassured.pageobjects.NewsletterSignUpPageObject;
+import com.epam.restassured.pageobjects.SignUpConfirmationPageObject;
+import com.epam.restassured.pageobjects.verifier.SignUpConfirmationPageVerifier;
 import com.epam.restassured.service.client.SubscriberServiceClient;
 import com.google.common.collect.ImmutableList;
 
@@ -86,9 +86,9 @@ public class BasicServiceTestWithWebDriverAndRest {
      */
     @Test
     public void addRecord() throws TestExecutionException {
-        new SignUpPagePageObject(driver).signUp(signUpModel);
-        ThankYouPageVerifier thankYouPageVerifier = new ThankYouPageVerifier(new ThankYouPagePageObject(driver));
-        thankYouPageVerifier.whenSubscribeFinishedCheckDataOnPage(signUpModel.getFirstName(), signUpModel.getEmail());
+        new NewsletterSignUpPageObject(driver).whenSignUp(signUpModel);
+        SignUpConfirmationPageVerifier signUpConfirmationPageVerifier = new SignUpConfirmationPageVerifier(new SignUpConfirmationPageObject(driver));
+        signUpConfirmationPageVerifier.whenSubscribeFinishedCheckDataOnPage(signUpModel.getFirstName(), signUpModel.getEmail());
 
         subscriberServiceClient.getSubscribers()
                 .then().statusCode(HttpStatus.SC_OK)

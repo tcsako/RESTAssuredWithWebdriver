@@ -6,6 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
+import com.epam.restassured.webdriver.factory.api.ElementFactory;
+
 /**
  * Base class for page objects.
  *
@@ -16,15 +18,6 @@ public abstract class AbstractBasePage {
 
     protected AbstractBasePage(WebDriver driver) {
         this.driver = driver;
-        PageFactory.initElements(this.driver, this);
-    }
-
-    //TODO wrap WebElemwnt
-    protected void fillField(WebElement element, String fieldValue) {
-        Optional.ofNullable(element).ifPresent(webElement -> {
-            webElement.clear();
-            webElement.sendKeys(fieldValue);
-        });
     }
 
     protected WebDriver getDriver() {
