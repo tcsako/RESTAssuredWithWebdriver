@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Cconfiguration status="fatal">
+  <Appenders>
+    <Console name="STDOUT" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss MM-dd-yyyy} - [%t] %-5p %c{1.} - %m%n"/>
+    </Console>
+  </Appenders>
+
+  <Loggers>
+    <Root level="debug">
+      <AppenderRef ref="STDOUT" />
+    </Root>
+  </Loggers>
+</Cconfiguration>

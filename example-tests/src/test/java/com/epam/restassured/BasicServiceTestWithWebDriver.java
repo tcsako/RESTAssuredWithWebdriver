@@ -1,14 +1,5 @@
 package com.epam.restassured;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-
 import com.epam.restassured.csvreader.CSVReaderUtilitySingleton;
 import com.epam.restassured.csvreader.model.CSVRestTestInputModel;
 import com.epam.restassured.env.EnvironmentProvider;
@@ -22,6 +13,15 @@ import com.epam.restassured.service.client.SubscriberServiceClient;
 import com.epam.restassured.url.SignUpPathProvider;
 import com.epam.restassured.url.UrlBuilder;
 import com.google.common.collect.ImmutableList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+import java.util.List;
 
 /**
  * Represents an automated subscription to the newsletter with the {@link WebDriver}.
@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableList;
  * Created by Peter_Olah1 on 12/16/2015.
  */
 public class BasicServiceTestWithWebDriver {
-    private static final Logger LOG = Logger.getLogger(BasicServiceTestWithWebDriver.class);
+    private static final Logger LOG = LogManager.getLogger(BasicServiceTestWithWebDriver.class);
 
     private static final String BASE_URL_PROPERTY = "BASE_URL";
     private static final String DEFAULT_TEST_INPUT_FILE = "test_data_webdriver.csv";
@@ -46,7 +46,7 @@ public class BasicServiceTestWithWebDriver {
      */
     @Before
     public void setUp() throws TestExecutionException {
-    	LOG.info("Starting Before method in " + this.toString());
+        LOG.info("Starting Before method in " + this.toString());
         new SubscriberServiceClient().deleteSubscribers();
 
         final List<CSVRestTestInputModel> testData = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE, DEFAULT_TEST_PARAMETERS);
@@ -67,7 +67,7 @@ public class BasicServiceTestWithWebDriver {
 
         newsletterSignUpPageObject = new NewsletterSignUpPageObject(driver);
         newsletterSignUpPageVerifier = new NewsletterSignUpPageVerifier(newsletterSignUpPageObject);
-    	LOG.info("Before has been finished in " + this.toString());
+        LOG.info("Before has been finished in " + this.toString());
     }
 
     /**
@@ -75,13 +75,13 @@ public class BasicServiceTestWithWebDriver {
      */
     @Test
     public void shouldSubscribe() throws TestExecutionException {
-    	LOG.info("Starting test script " + this.toString());
-    	newsletterSignUpPageVerifier.givenSignUpPageFieldsDisplayed();
-    	newsletterSignUpPageVerifier.givenSignUpPageHeadersDisplayed();
+        LOG.info("Starting test script " + this.toString());
+        newsletterSignUpPageVerifier.givenSignUpPageFieldsDisplayed();
+        newsletterSignUpPageVerifier.givenSignUpPageHeadersDisplayed();
         newsletterSignUpPageObject.whenSignUp(signUpModel);
         SignUpConfirmationPageVerifier thankYouPageVerifier = new SignUpConfirmationPageVerifier(new SignUpConfirmationPageObject(driver));
         thankYouPageVerifier.whenSubscribeFinishedCheckDataOnPage(signUpModel.getFirstName(), signUpModel.getEmail());
-    	LOG.info("Test script has been finished in " + this.toString());
+        LOG.info("Test script has been finished in " + this.toString());
     }
 
     /**
@@ -93,7 +93,7 @@ public class BasicServiceTestWithWebDriver {
         if (driver != null) {
             driver.quit();
         }
-    	LOG.info("After has been finished in " + this.toString());
+        LOG.info("After has been finished in " + this.toString());
     }
 }
 

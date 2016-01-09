@@ -1,22 +1,22 @@
 package com.epam.restassured;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.epam.restassured.exception.TestExecutionException;
 import com.epam.restassured.model.SignUpModel;
 import com.epam.restassured.model.SubscriberResponse;
 import com.epam.restassured.service.client.SignUpServiceClient;
 import com.epam.restassured.service.client.SubscriberServiceClient;
 import com.jayway.restassured.response.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 public class SampleRestTest {
-    private static final Logger LOG = Logger.getLogger(SampleRestDataDrivenTest.class);
+    private static final Logger LOG = LogManager.getLogger(SampleRestDataDrivenTest.class);
     private SubscriberServiceClient subscriberServiceClient;
 
     @Before

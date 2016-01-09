@@ -1,16 +1,12 @@
 package com.epam.restassured.webdriver.base;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.Locatable;
+
+import java.util.List;
 
 /**
  * An implementation of the Element interface. Delegates its work to an underlying WebElement instance for
@@ -18,7 +14,7 @@ import org.openqa.selenium.internal.Locatable;
  */
 public class ElementImpl implements Element {
 
-    private static final Logger LOG = Logger.getLogger(ElementImpl.class);
+    private static final Logger LOG = LogManager.getLogger(ElementImpl.class);
     private final WebElement element;
 
     /**
@@ -28,6 +24,10 @@ public class ElementImpl implements Element {
      */
     public ElementImpl(final WebElement element) {
         this.element = element;
+    }
+
+    public static Logger getLog() {
+        return LOG;
     }
 
     @Override
@@ -115,18 +115,13 @@ public class ElementImpl implements Element {
         return ((Locatable) element).getCoordinates();
     }
 
+    @Override
+    public <X> X getScreenshotAs(OutputType<X> arg0) throws WebDriverException {
+        return getScreenshotAs(arg0);
+    }
 
-	@Override
-	public <X> X getScreenshotAs(OutputType<X> arg0) throws WebDriverException {
-		return getScreenshotAs(arg0);
-	}
-	
-	@Override
+    @Override
     public boolean elementWired() {
         return (element != null);
     }
-
-	public static Logger getLog() {
-		return LOG;
-	}
 }

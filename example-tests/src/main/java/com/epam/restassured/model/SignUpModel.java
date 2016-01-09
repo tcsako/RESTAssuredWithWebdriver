@@ -1,5 +1,7 @@
 package com.epam.restassured.model;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.Objects;
 
 /**
@@ -65,6 +67,16 @@ public final class SignUpModel {
                 && Objects.equals(this.email, other.email)
                 && Objects.equals(this.emailConfirmation, other.emailConfirmation)
                 && Objects.equals(this.wantNewsletters, other.wantNewsletters);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(SignUpModel.class)
+                .add("firstName", firstName)
+                .add("lastName", lastName)
+                .add("email", email)
+                .add("emailConfirmation", emailConfirmation)
+                .add("wantNewsletters", wantNewsletters).toString();
     }
 
     public static final class Builder {

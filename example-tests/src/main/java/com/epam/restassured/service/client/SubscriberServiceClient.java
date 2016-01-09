@@ -1,19 +1,19 @@
 package com.epam.restassured.service.client;
 
-import static com.jayway.restassured.RestAssured.delete;
-import static com.jayway.restassured.RestAssured.get;
-
-import org.apache.http.HttpStatus;
-import org.apache.log4j.Logger;
-
 import com.epam.restassured.env.EnvironmentProvider;
 import com.epam.restassured.url.SubscribersPathProvider;
 import com.epam.restassured.url.UrlBuilder;
 import com.google.common.collect.ImmutableMap;
 import com.jayway.restassured.response.Response;
+import org.apache.http.HttpStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import static com.jayway.restassured.RestAssured.delete;
+import static com.jayway.restassured.RestAssured.get;
 
 public class SubscriberServiceClient {
-    private static final Logger LOG = Logger.getLogger(SubscriberServiceClient.class);
+    private static final Logger LOG = LogManager.getLogger(SubscriberServiceClient.class);
 
     private final UrlBuilder urlBuilder = new UrlBuilder(new EnvironmentProvider().get().get("BASE_URL")).forPath(new SubscribersPathProvider().get());
 

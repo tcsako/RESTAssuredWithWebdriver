@@ -1,7 +1,11 @@
 package com.epam.restassured.csvreader;
 
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
+import com.epam.restassured.csvreader.model.CSVRestTestInputModel;
+import com.epam.restassured.exception.TestExecutionException;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,12 +13,8 @@ import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
-import org.apache.log4j.Logger;
-
-import com.epam.restassured.csvreader.model.CSVRestTestInputModel;
-import com.epam.restassured.exception.TestExecutionException;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Singleton representation of a CSV Reader utility class.
@@ -22,7 +22,7 @@ import com.epam.restassured.exception.TestExecutionException;
  * @author Tamas_Csako
  */
 public final class CSVReaderUtilitySingleton {
-    private static final Logger LOG = Logger.getLogger(CSVReaderUtilitySingleton.class);
+    private static final Logger LOG = LogManager.getLogger(CSVReaderUtilitySingleton.class);
 
     // Private instance
     private static CSVReaderUtilitySingleton instance;
