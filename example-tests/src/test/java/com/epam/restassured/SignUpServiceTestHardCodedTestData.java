@@ -13,6 +13,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import org.apache.http.HttpStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,8 +22,9 @@ import com.epam.restassured.model.SignUpModel;
 import com.epam.restassured.service.client.SignUpServiceClient;
 import com.epam.restassured.service.client.SubscriberServiceClient;
 
-public class BasicServiceTestWithRest {
+public class SignUpServiceTestHardCodedTestData {
 
+    private static final Logger LOG = LogManager.getLogger(SignUpServiceTestDDT.class);
     private static final int NUMBER_OF_RESPONSE = 1;
     private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
     private static final String CONTENT_EMAIL_ADDRESS = "content.emailAddress";
@@ -41,8 +44,12 @@ public class BasicServiceTestWithRest {
      */
     @Before
     public void setUp() throws Exception {
-        subscriberServiceClient = new SubscriberServiceClient();
+    	LOG.info("Starting before to delete all existing subsribers");
+
+    	subscriberServiceClient = new SubscriberServiceClient();
         subscriberServiceClient.deleteSubscribers();
+
+        LOG.info("Before is finished");
     }
 
     /**
@@ -51,7 +58,8 @@ public class BasicServiceTestWithRest {
      * @throws Exception
      */
     @Test
-    public void addRecord() {
+    public void should_Subsribe_When_ValidUser() {
+    	LOG.info("Sign up with user and verify subsruber");
         new SignUpServiceClient().signUp(SignUpModel.builder()
                 .firstName(FIRST_NAME)
                 .lastName(LAST_NAME)

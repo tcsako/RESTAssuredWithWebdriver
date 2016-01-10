@@ -27,7 +27,7 @@ public class SignUpConfirmationPageVerifier {
 	 * @param email
 	 *            The displayed email address.
 	 */
-	public void whenSubscribeFinishedCheckDataOnPage(String firstName, String email) {
+	public void thenSubscribeFinishedCheckDataOnPage(String firstName, String email) {
 		Verify.verify(signUpConfirmationPageObject.getUrl().startsWith("https://t7-f0x.rhcloud.com/subscription/thank-you.html?"));
 		isHeaderContainsFirstName(firstName);
 		isSubTitleContainsEmail(email);
