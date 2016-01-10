@@ -27,8 +27,8 @@ import static org.hamcrest.Matchers.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(Parameterized.class)
-public class SignUpServiceTestDDT {
-    private static final Logger LOG = LogManager.getLogger(SignUpServiceTestDDT.class);
+public class SignUpServiceDDTTest {
+    private static final Logger LOG = LogManager.getLogger(SignUpServiceDDTTest.class);
     private static final String DEFAULT_TEST_INPUT_FILE = "test_data_rest_ddt.csv";
     private static final List<String> DEFAULT_TEST_PARAMETERS = ImmutableList.of("firstName", "lastName", "emailAddress", "emailAddressConfirmation", "newsletterOptIn");
     private static final int EXPECTED_FILTEREDRESULT_NAME = 1;

@@ -22,9 +22,9 @@ import com.epam.restassured.model.SignUpModel;
 import com.epam.restassured.service.client.SignUpServiceClient;
 import com.epam.restassured.service.client.SubscriberServiceClient;
 
-public class SignUpServiceTestHardCodedTestData {
+public class SignUpServiceHardCodedTestDataTest {
 
-    private static final Logger LOG = LogManager.getLogger(SignUpServiceTestDDT.class);
+    private static final Logger LOG = LogManager.getLogger(SignUpServiceDDTTest.class);
     private static final int NUMBER_OF_RESPONSE = 1;
     private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
     private static final String CONTENT_EMAIL_ADDRESS = "content.emailAddress";

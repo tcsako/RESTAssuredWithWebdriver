@@ -13,8 +13,8 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class SignUpServiceTestNoBDD {
-    private static final Logger LOG = LogManager.getLogger(SignUpServiceTestDDT.class);
+public class SignUpServiceNoBDDTest {
+    private static final Logger LOG = LogManager.getLogger(SignUpServiceDDTTest.class);
     private SubscriberServiceClient subscriberServiceClient;
 
     @Before

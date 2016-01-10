@@ -21,8 +21,8 @@ import com.epam.restassured.service.client.SignUpServiceClient;
 import com.epam.restassured.service.client.SubscriberServiceClient;
 import com.google.common.collect.ImmutableList;
 
-public class SignUpServiceTestNamingConvention {
-    private static final Logger LOG = LogManager.getLogger(SignUpServiceTestNamingConvention.class);
+public class SignUpServiceNamingConventionTest {
+    private static final Logger LOG = LogManager.getLogger(SignUpServiceNamingConventionTest.class);
     private static final int NUMBER_OF_RESPONSE = 1;
     private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
     private static final String CONTENT_EMAIL_ADDRESS = "content.emailAddress";
