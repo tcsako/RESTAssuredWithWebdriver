@@ -36,8 +36,8 @@ import static org.hamcrest.Matchers.*;
  * <p>
  * Created by Tamas_Csako
  */
-public class BasicServiceTestWithWebDriverAndRest {
-    private static final Logger LOG = LogManager.getLogger(BasicServiceTestWithWebDriverAndRest.class);
+public class SignUpE2ETest {
+    private static final Logger LOG = LogManager.getLogger(SignUpE2ETest.class);
 
     private static final int NUMBER_OF_RESPONSE = 1;
     private static final String CONTENT_NUMBER_OF_ELEMENTS = "numberOfElements";
@@ -57,7 +57,9 @@ public class BasicServiceTestWithWebDriverAndRest {
      */
     @Before
     public void setUp() throws TestExecutionException {
-        subscriberServiceClient = new SubscriberServiceClient();
+    	LOG.info("Starting before to delete all existing subsribers");
+
+    	subscriberServiceClient = new SubscriberServiceClient();
         subscriberServiceClient.deleteSubscribers();
 
         final List<CSVRestTestInputModel> testData = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE, DEFAULT_TEST_PARAMETERS);
@@ -71,10 +73,14 @@ public class BasicServiceTestWithWebDriverAndRest {
                     .wantNewsletters(testInput.isNewsletterOptIn())
                     .build();
         }
+
         LOG.info("Initializing Firefox driver");
         driver = new FirefoxDriver();
+
         LOG.info("Opening subscription page");
         driver.get("https://t7-f0x.rhcloud.com/subscription/subscription.html");
+
+        LOG.info("Before is finished");
     }
 
     /**
@@ -83,15 +89,20 @@ public class BasicServiceTestWithWebDriverAndRest {
      * @throws TestExecutionException
      */
     @Test
-    public void addRecord() throws TestExecutionException {
+    public void should_Subsribe_When_ValidUser() throws TestExecutionException {
+        LOG.info("Starting test script");
         new NewsletterSignUpPageObject(driver).whenSignUp(signUpModel);
-        SignUpConfirmationPageVerifier signUpConfirmationPageVerifier = new SignUpConfirmationPageVerifier(new SignUpConfirmationPageObject(driver));
-        signUpConfirmationPageVerifier.whenSubscribeFinishedCheckDataOnPage(signUpModel.getFirstName(), signUpModel.getEmail());
 
+        SignUpConfirmationPageVerifier signUpConfirmationPageVerifier = new SignUpConfirmationPageVerifier(new SignUpConfirmationPageObject(driver));
+        signUpConfirmationPageVerifier.thenSubscribeFinishedCheckDataOnPage(signUpModel.getFirstName(), signUpModel.getEmail());
+
+        LOG.info("Verify user through REST service");
         subscriberServiceClient.getSubscribers()
                 .then().statusCode(HttpStatus.SC_OK)
                 .and().content(CONTENT_NUMBER_OF_ELEMENTS, is(equalTo(NUMBER_OF_RESPONSE)))
                 .and().content(CONTENT_EMAIL_ADDRESS, contains(signUpModel.getEmail()));
+
+        LOG.info("Test script has been finished in");
     }
 
     /**
@@ -99,8 +110,12 @@ public class BasicServiceTestWithWebDriverAndRest {
      */
     @After
     public void tearDown() {
+        LOG.info("Starting After to close browser");
+
         if (driver != null) {
             driver.quit();
         }
+
+        LOG.info("After has been finished in");
     }
 }

@@ -29,8 +29,8 @@ import java.util.List;
  * <p>
  * Created by Peter_Olah1 on 12/16/2015.
  */
-public class BasicServiceTestWithWebDriver {
-    private static final Logger LOG = LogManager.getLogger(BasicServiceTestWithWebDriver.class);
+public class SignUpUITest {
+    private static final Logger LOG = LogManager.getLogger(SignUpUITest.class);
 
     private static final String BASE_URL_PROPERTY = "BASE_URL";
     private static final String DEFAULT_TEST_INPUT_FILE = "test_data_webdriver.csv";
@@ -46,8 +46,9 @@ public class BasicServiceTestWithWebDriver {
      */
     @Before
     public void setUp() throws TestExecutionException {
-        LOG.info("Starting Before method in " + this.toString());
-        new SubscriberServiceClient().deleteSubscribers();
+    	LOG.info("Starting before to delete all existing subsribers and set up test data");
+
+    	new SubscriberServiceClient().deleteSubscribers();
 
         final List<CSVRestTestInputModel> testData = CSVReaderUtilitySingleton.getInstance().getIntput(DEFAULT_TEST_INPUT_FILE, DEFAULT_TEST_PARAMETERS);
         if (!testData.isEmpty()) {
@@ -67,21 +68,25 @@ public class BasicServiceTestWithWebDriver {
 
         newsletterSignUpPageObject = new NewsletterSignUpPageObject(driver);
         newsletterSignUpPageVerifier = new NewsletterSignUpPageVerifier(newsletterSignUpPageObject);
-        LOG.info("Before has been finished in " + this.toString());
+        LOG.info("Before is finished");
     }
 
     /**
      * Signs up with the given data. Makes basic verifications about the page display and elements behavior.
      */
     @Test
-    public void shouldSubscribe() throws TestExecutionException {
-        LOG.info("Starting test script " + this.toString());
+    public void should_Subsribe_When_ValidUser() throws TestExecutionException {
+        LOG.info("Starting test script");
+        
         newsletterSignUpPageVerifier.givenSignUpPageFieldsDisplayed();
         newsletterSignUpPageVerifier.givenSignUpPageHeadersDisplayed();
+        
         newsletterSignUpPageObject.whenSignUp(signUpModel);
+        
         SignUpConfirmationPageVerifier thankYouPageVerifier = new SignUpConfirmationPageVerifier(new SignUpConfirmationPageObject(driver));
-        thankYouPageVerifier.whenSubscribeFinishedCheckDataOnPage(signUpModel.getFirstName(), signUpModel.getEmail());
-        LOG.info("Test script has been finished in " + this.toString());
+        thankYouPageVerifier.thenSubscribeFinishedCheckDataOnPage(signUpModel.getFirstName(), signUpModel.getEmail());
+        
+        LOG.info("Test script has been finished in");
     }
 
     /**
@@ -89,11 +94,11 @@ public class BasicServiceTestWithWebDriver {
      */
     @After
     public void tearDown() {
-        LOG.info("Starting After in" + this.toString() + "to close browser");
+        LOG.info("Starting After to close browser");
         if (driver != null) {
             driver.quit();
         }
-        LOG.info("After has been finished in " + this.toString());
+        LOG.info("After has been finished in");
     }
 }
 
