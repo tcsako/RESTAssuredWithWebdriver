@@ -1,13 +1,5 @@
 package com.epam.newsletter;
 
-//TODO: 1. create basic webdriver script + proper page object pattern usage
-//TODO: 2. create basic script to do the subscription with webdriver and verify with rest
-//TODO: 3. create composition for subscription page with PO (using abstract factory)
-//TODO: 4. cerate CSV reader with Singleton design pattern
-//TODO: 5. create DDT script for REST script
-//TODO: 6. create DDT script for webdriver script
-//TODO: 7. create rest script without BDD style (using JUnit asssertions)
-
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -59,7 +51,7 @@ public class SignUpServiceHardCodedTestDataTest {
      */
     @Test
     public void should_Subsribe_When_ValidUser() {
-    	LOG.info("Sign up with user and verify subsruber");
+    	LOG.info("Sign up with user and verify subscriber");
         new SignUpServiceClient().signUp(SignUpModel.builder()
                 .firstName(FIRST_NAME)
                 .lastName(LAST_NAME)
