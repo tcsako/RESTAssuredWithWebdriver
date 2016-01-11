@@ -1,4 +1,4 @@
-package com.epam.restassured;
+package com.epam.newsletter;
 
 import com.epam.restassured.csvreader.CSVReaderUtilitySingleton;
 import com.epam.restassured.csvreader.model.CSVRestTestInputModel;

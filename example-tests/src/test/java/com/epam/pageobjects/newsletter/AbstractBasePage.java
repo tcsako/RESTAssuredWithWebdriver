@@ -1,12 +1,6 @@
-package com.epam.restassured.pageobjects;
-
-import java.util.Optional;
+package com.epam.pageobjects.newsletter;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
-
-import com.epam.restassured.webdriver.factory.api.ElementFactory;
 
 /**
  * Base class for page objects.

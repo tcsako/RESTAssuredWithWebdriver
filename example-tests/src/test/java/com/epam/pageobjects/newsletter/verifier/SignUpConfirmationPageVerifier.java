@@ -1,6 +1,6 @@
-package com.epam.restassured.pageobjects.verifier;
+package com.epam.pageobjects.newsletter.verifier;
 
-import com.epam.restassured.pageobjects.SignUpConfirmationPageObject;
+import com.epam.pageobjects.newsletter.SignUpConfirmationPage;
 import com.google.common.base.Verify;
 
 /**
@@ -9,13 +9,14 @@ import com.google.common.base.Verify;
  * Created by Peter_Olah1 on 12/10/2015.
  */
 public class SignUpConfirmationPageVerifier {
-	private SignUpConfirmationPageObject signUpConfirmationPageObject;
+	
+	private SignUpConfirmationPage signUpConfirmationPageObject;
 
 	/**
 	 * Class constructor.
 	 *
 	 */
-	public SignUpConfirmationPageVerifier(SignUpConfirmationPageObject signUpConfirmationPageObject) {
+	public SignUpConfirmationPageVerifier(SignUpConfirmationPage signUpConfirmationPageObject) {
 		this.signUpConfirmationPageObject = signUpConfirmationPageObject;
 	}
 

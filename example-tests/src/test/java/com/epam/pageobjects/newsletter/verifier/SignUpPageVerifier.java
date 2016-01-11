@@ -1,6 +1,6 @@
-package com.epam.restassured.pageobjects.verifier;
+package com.epam.pageobjects.newsletter.verifier;
 
-import com.epam.restassured.pageobjects.NewsletterSignUpPageObject;
+import com.epam.pageobjects.newsletter.SignUpPage;
 import com.google.common.base.Verify;
 
 /**
@@ -8,16 +8,17 @@ import com.google.common.base.Verify;
  *
  * Created by Peter_Olah1 on 12/16/2015.
  */
-public class NewsletterSignUpPageVerifier {
+public class SignUpPageVerifier {
+	
 	private static final String EXPECTED_HEADER_TITLE_TEXT = "Sign up for our newsletter";
 	private static final String EXPECTED_SUB_HEADER_TITLE_TEXT = "get instant updates on hot products and special deals";
-	private NewsletterSignUpPageObject newsletterSignUpPageObject;
+	private SignUpPage newsletterSignUpPageObject;
 
 	/**
 	 * Class constructor.
 	 *
 	 */
-	public NewsletterSignUpPageVerifier(NewsletterSignUpPageObject newsletterSignUpPageObject) {
+	public SignUpPageVerifier(SignUpPage newsletterSignUpPageObject) {
 		this.newsletterSignUpPageObject = newsletterSignUpPageObject;
 	}
 

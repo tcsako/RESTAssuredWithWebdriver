@@ -1,4 +1,8 @@
-package com.epam.restassured;
+package com.epam.newsletter;
+
+import com.epam.pageobjects.newsletter.SignUpPage;
+import com.epam.pageobjects.newsletter.SignUpConfirmationPage;
+import com.epam.pageobjects.newsletter.verifier.SignUpConfirmationPageVerifier;
 
 //TODO: 1. create basic webdriver script + proper page object pattern usage  - [FINISHED]
 //TODO: 2. create basic script to do the subscription with webdriver and verify with rest - [FINISHED]
@@ -12,9 +16,6 @@ import com.epam.restassured.csvreader.CSVReaderUtilitySingleton;
 import com.epam.restassured.csvreader.model.CSVRestTestInputModel;
 import com.epam.restassured.exception.TestExecutionException;
 import com.epam.restassured.model.SignUpModel;
-import com.epam.restassured.pageobjects.NewsletterSignUpPageObject;
-import com.epam.restassured.pageobjects.SignUpConfirmationPageObject;
-import com.epam.restassured.pageobjects.verifier.SignUpConfirmationPageVerifier;
 import com.epam.restassured.service.client.SubscriberServiceClient;
 import com.google.common.collect.ImmutableList;
 import org.apache.http.HttpStatus;
@@ -91,9 +92,9 @@ public class SignUpE2ETest {
     @Test
     public void should_Subsribe_When_ValidUser() throws TestExecutionException {
         LOG.info("Starting test script");
-        new NewsletterSignUpPageObject(driver).whenSignUp(signUpModel);
+        new SignUpPage(driver).whenSignUp(signUpModel);
 
-        SignUpConfirmationPageVerifier signUpConfirmationPageVerifier = new SignUpConfirmationPageVerifier(new SignUpConfirmationPageObject(driver));
+        SignUpConfirmationPageVerifier signUpConfirmationPageVerifier = new SignUpConfirmationPageVerifier(new SignUpConfirmationPage(driver));
         signUpConfirmationPageVerifier.thenSubscribeFinishedCheckDataOnPage(signUpModel.getFirstName(), signUpModel.getEmail());
 
         LOG.info("Verify user through REST service");
