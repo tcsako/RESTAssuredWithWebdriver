@@ -1,4 +1,4 @@
-package com.epam.restassured;
+package com.epam.newsletter;
 
 //TODO: 1. create basic webdriver script + proper page object pattern usage
 //TODO: 2. create basic script to do the subscription with webdriver and verify with rest

@@ -1,4 +1,4 @@
-package com.epam.restassured.pageobjects;
+package com.epam.pageobjects.newsletter;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -15,19 +15,13 @@ import com.epam.restassured.webdriver.widgets.TextInput;
  *
  * @author Peter_Olah1
  */
-public class NewsletterSignUpPageObject extends AbstractBasePage {
+public class SignUpPage extends AbstractBasePage {
 
     @FindBy(id = "firstName")
     private TextInput firstName;
 
     @FindBy(id = "lastName")
     private TextInput lastName;
-
-    @FindBy(css = "h1")
-    private TextElement headerTitle;
-
-    @FindBy(css = "h2")
-    private TextElement subHeaderTitle;
 
     @FindBy(id = "emailAddress")
     private TextInput emailAddress;
@@ -41,7 +35,13 @@ public class NewsletterSignUpPageObject extends AbstractBasePage {
     @FindBy(css = "input[type=\"submit\"]")
     private Button submitButton;
 
-    public NewsletterSignUpPageObject(WebDriver driver) {
+    @FindBy(css = "h1")
+    private TextElement headerTitle;
+
+    @FindBy(css = "h2")
+    private TextElement subHeaderTitle;
+
+    public SignUpPage(WebDriver driver) {
         super(driver);
         ElementFactory.initElements(getDriver(), this);
     }

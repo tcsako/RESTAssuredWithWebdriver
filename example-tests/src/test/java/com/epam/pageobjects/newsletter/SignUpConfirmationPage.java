@@ -1,4 +1,4 @@
-package com.epam.restassured.pageobjects;
+package com.epam.pageobjects.newsletter;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -12,7 +12,7 @@ import com.epam.restassured.webdriver.widgets.TextElement;
  * @author Peter_Olah1
  *
  */
-public class SignUpConfirmationPageObject extends AbstractBasePage {
+public class SignUpConfirmationPage extends AbstractBasePage {
 
     @FindBy(css = "h1")
     private TextElement headerTitle;
@@ -25,7 +25,7 @@ public class SignUpConfirmationPageObject extends AbstractBasePage {
      *
      * @param driver {@link WebDriver}.
      */
-    public SignUpConfirmationPageObject(WebDriver driver) {
+    public SignUpConfirmationPage(WebDriver driver) {
         super(driver);
         ElementFactory.initElements(getDriver(), this);
     }

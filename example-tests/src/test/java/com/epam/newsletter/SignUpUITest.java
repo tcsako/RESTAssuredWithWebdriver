@@ -1,14 +1,14 @@
-package com.epam.restassured;
+package com.epam.newsletter;
 
+import com.epam.pageobjects.newsletter.SignUpPage;
+import com.epam.pageobjects.newsletter.SignUpConfirmationPage;
+import com.epam.pageobjects.newsletter.verifier.SignUpPageVerifier;
+import com.epam.pageobjects.newsletter.verifier.SignUpConfirmationPageVerifier;
 import com.epam.restassured.csvreader.CSVReaderUtilitySingleton;
 import com.epam.restassured.csvreader.model.CSVRestTestInputModel;
 import com.epam.restassured.env.EnvironmentProvider;
 import com.epam.restassured.exception.TestExecutionException;
 import com.epam.restassured.model.SignUpModel;
-import com.epam.restassured.pageobjects.NewsletterSignUpPageObject;
-import com.epam.restassured.pageobjects.SignUpConfirmationPageObject;
-import com.epam.restassured.pageobjects.verifier.NewsletterSignUpPageVerifier;
-import com.epam.restassured.pageobjects.verifier.SignUpConfirmationPageVerifier;
 import com.epam.restassured.service.client.SubscriberServiceClient;
 import com.epam.restassured.url.SignUpPathProvider;
 import com.epam.restassured.url.UrlBuilder;
@@ -37,8 +37,8 @@ public class SignUpUITest {
     private static final List<String> DEFAULT_TEST_PARAMETERS = ImmutableList.of("firstName", "lastName", "emailAddress", "emailAddressConfirmation", "newsletterOptIn");
 
     private WebDriver driver;
-    private NewsletterSignUpPageObject newsletterSignUpPageObject;
-    private NewsletterSignUpPageVerifier newsletterSignUpPageVerifier;
+    private SignUpPage newsletterSignUpPageObject;
+    private SignUpPageVerifier newsletterSignUpPageVerifier;
     private SignUpModel signUpModel;
 
     /**
@@ -66,8 +66,8 @@ public class SignUpUITest {
         UrlBuilder urlBuilder = new UrlBuilder(new EnvironmentProvider().get().get(BASE_URL_PROPERTY));
         driver.get(urlBuilder.buildUriFor(new SignUpPathProvider()));
 
-        newsletterSignUpPageObject = new NewsletterSignUpPageObject(driver);
-        newsletterSignUpPageVerifier = new NewsletterSignUpPageVerifier(newsletterSignUpPageObject);
+        newsletterSignUpPageObject = new SignUpPage(driver);
+        newsletterSignUpPageVerifier = new SignUpPageVerifier(newsletterSignUpPageObject);
         LOG.info("Before is finished");
     }
 
@@ -83,7 +83,7 @@ public class SignUpUITest {
         
         newsletterSignUpPageObject.whenSignUp(signUpModel);
         
-        SignUpConfirmationPageVerifier thankYouPageVerifier = new SignUpConfirmationPageVerifier(new SignUpConfirmationPageObject(driver));
+        SignUpConfirmationPageVerifier thankYouPageVerifier = new SignUpConfirmationPageVerifier(new SignUpConfirmationPage(driver));
         thankYouPageVerifier.thenSubscribeFinishedCheckDataOnPage(signUpModel.getFirstName(), signUpModel.getEmail());
         
         LOG.info("Test script has been finished in");

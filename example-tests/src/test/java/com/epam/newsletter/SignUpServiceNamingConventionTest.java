@@ -1,4 +1,4 @@
-package com.epam.restassured;
+package com.epam.newsletter;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
@@ -102,7 +102,7 @@ public class SignUpServiceNamingConventionTest {
      * @throws TestExecutionException
      */
     @Test
-    public void testUserCanSubsribe() throws TestExecutionException {
+    public void testSignUp() throws TestExecutionException {
     	LOG.info("Sign up with: " + signUpModel.toString());
         signUpServiceClient.signUp(signUpModel);
     	LOG.info("Verify subsriber");
@@ -118,7 +118,7 @@ public class SignUpServiceNamingConventionTest {
      * @throws TestExecutionException
      */
     @Test
-    public void userCanSubsribe() throws TestExecutionException {
+    public void signUp() throws TestExecutionException {
     	LOG.info("Sign up with: " + signUpModel.toString());
         signUpServiceClient.signUp(signUpModel);
     	LOG.info("Verify subsriber");
@@ -137,6 +137,7 @@ public class SignUpServiceNamingConventionTest {
     public void should_Subsribe_When_ValidUser() throws TestExecutionException {
     	LOG.info("Sign up with: " + signUpModel.toString());
         signUpServiceClient.signUp(signUpModel);
+        
     	LOG.info("Verify subsriber");
         subscriberServiceClient.getSubscribers()
                 .then().statusCode(HttpStatus.SC_OK)
