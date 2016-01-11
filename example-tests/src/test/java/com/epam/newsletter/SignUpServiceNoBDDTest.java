@@ -4,7 +4,6 @@ import com.epam.restassured.exception.TestExecutionException;
 import com.epam.restassured.model.SignUpModel;
 import com.epam.restassured.service.client.SignUpServiceClient;
 import com.epam.restassured.service.client.SubscriberServiceClient;
-import com.jayway.restassured.path.json.JsonPath;
 import com.jayway.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +12,6 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertEquals;
 
 public class SignUpServiceNoBDDTest {
     private static final Logger LOG = LogManager.getLogger(SignUpServiceDDTTest.class);
