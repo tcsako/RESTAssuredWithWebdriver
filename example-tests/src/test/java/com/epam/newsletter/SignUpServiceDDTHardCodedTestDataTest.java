@@ -25,84 +25,88 @@ import static org.hamcrest.Matchers.*;
 public class SignUpServiceDDTHardCodedTestDataTest {
 
 	private static final Logger LOG = LogManager.getLogger(SignUpServiceDDTHardCodedTestDataTest.class);
-    private static final int EXPECTED_FILTEREDRESULT_NAME = 1;
+	private static final int EXPECTED_FILTEREDRESULT_NAME = 1;
 
-    @Parameterized.Parameter
-    public int expectedNumberOfElements;
+	public int expectedNumberOfElements;
+	public String firstName;
+	public String lastName;
+	public String email;
+	public String emailConfirmation;
+	public String wantNewsletters;
 
-    @Parameterized.Parameter(1)
-    public String firstName;
+	private SignUpServiceClient signUpServiceClient;
+	private SubscriberServiceClient subscriberServiceClient;
 
-    @Parameterized.Parameter(2)
-    public String lastName;
+	/**
+	 * Constructor to initialize parameters
+	 * 
+	 * @param expectedNumberOfElements
+	 * @param firstName
+	 * @param lastName
+	 * @param email
+	 * @param emailConfirmation
+	 * @param wantNewsletters
+	 */
+	public SignUpServiceDDTHardCodedTestDataTest(
+			int expectedNumberOfElements, String firstName, 
+			String lastName, String email, 
+			String emailConfirmation, String wantNewsletters) {
+		this.expectedNumberOfElements = expectedNumberOfElements;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.emailConfirmation = emailConfirmation;
+		this.wantNewsletters = wantNewsletters;
+	}
 
-    @Parameterized.Parameter(3)
-    public String email;
+	/**
+	 * Sets up the expected and actual parameters for the DDT methods.
+	 *
+	 * @return A 2 dimension array.
+	 * @throws TestExecutionException
+	 */
+	@Parameterized.Parameters
+	public static Collection<Object[]> testDataSet() throws TestExecutionException {
+		LOG.info("Setting up test data for DDT");
+		return Arrays
+				.asList(new Object[][] { { 1, "John", "Doe", "johndoe@freecloud.com", "johndoe@freecloud.com", "true" },
+						{ 2, "Ronald", "Smith", "ronald@freecloud.com", "ronald@freecloud.com", "true" } });
+	}
 
-    @Parameterized.Parameter(4)
-    public String emailConfirmation;
+	@BeforeClass
+	public static void setUpBeforeClass() throws TestExecutionException {
+		LOG.info("Starting before test class to delete all existing subsribers");
 
-    @Parameterized.Parameter(5)
-    public String wantNewsletters;
+		new SubscriberServiceClient().deleteSubscribers();
 
-    private SignUpServiceClient signUpServiceClient;
-    private SubscriberServiceClient subscriberServiceClient;
+		LOG.info("Before test class is finished");
+	}
 
-    /**
-     * Sets up the expected and actual parameters for the DDT methods.
-     *
-     * @return A 2 dimension array.
-     * @throws TestExecutionException
-     */
-    @Parameterized.Parameters
-    public static Collection<Object[]> testDataSet() throws TestExecutionException {
-    	LOG.info("Setting up test data for DDT");
-    	return Arrays.asList(new Object[][]{
-                {1, "John", "Doe", "johndoe@freecloud.com", "johndoe@freecloud.com", "true"},
-                {2, "Ronald", "Smith", "ronald@freecloud.com", "ronald@freecloud.com", "true"}
-        });
-    }
+	@Before
+	public void setUp() throws TestExecutionException {
+		LOG.info("Starting before to initialize service objects");
 
-    @BeforeClass
-    public static void setUpBeforeClass() throws TestExecutionException {
-    	LOG.info("Starting before test class to delete all existing subsribers");
+		subscriberServiceClient = new SubscriberServiceClient();
+		signUpServiceClient = new SignUpServiceClient();
 
-    	new SubscriberServiceClient().deleteSubscribers();
-    	
-    	LOG.info("Before test class is finished");
-    }
+		LOG.info("Before is finished");
+	}
 
-    @Before
-    public void setUp() throws TestExecutionException {
-    	LOG.info("Starting before to initialize service objects");
+	@Test
+	public void should_Subsribe_When_ValidUser() {
+		LOG.info("Sign up with user and verify subscriber");
+		signUpServiceClient.signUp(SignUpModel.builder().firstName(firstName).lastName(lastName).email(email)
+				.emailConfirmation(emailConfirmation).wantNewsletters(Boolean.parseBoolean(wantNewsletters)).build());
+		subscriberServiceClient.searchFor(email).then().statusCode(HttpStatus.SC_OK).and()
+				.content("numberOfElements", is(equalTo(EXPECTED_FILTEREDRESULT_NAME))).and()
+				.content("content.emailAddress", contains(email));
+	}
 
-    	subscriberServiceClient = new SubscriberServiceClient();
-        signUpServiceClient = new SignUpServiceClient();
-
-        LOG.info("Before is finished");
-    }
-
-    @Test
-    public void should_Subsribe_When_ValidUser() {
-    	LOG.info("Sign up with user and verify subscriber");
-    	signUpServiceClient.signUp(SignUpModel.builder()
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
-                .emailConfirmation(emailConfirmation)
-                .wantNewsletters(Boolean.parseBoolean(wantNewsletters)).build());
-        subscriberServiceClient.searchFor(email)
-                .then().statusCode(HttpStatus.SC_OK)
-                .and().content("numberOfElements", is(equalTo(EXPECTED_FILTEREDRESULT_NAME)))
-                .and().content("content.emailAddress", contains(email));
-    }
-
-    @Test
-    public void should_VerifyNumberOfSubsribers_When_GetAllSubsribers() {
-    	LOG.info("Verify number of subsribers");
-        subscriberServiceClient.getSubscribers()
-                .then().statusCode(HttpStatus.SC_OK)
-                .and().content("numberOfElements", is(equalTo(expectedNumberOfElements)));
-    	LOG.info("Verification is finished");
-    }
+	@Test
+	public void should_VerifyNumberOfSubsribers_When_GetAllSubsribers() {
+		LOG.info("Verify number of subsribers");
+		subscriberServiceClient.getSubscribers().then().statusCode(HttpStatus.SC_OK).and().content("numberOfElements",
+				is(equalTo(expectedNumberOfElements)));
+		LOG.info("Verification is finished");
+	}
 }

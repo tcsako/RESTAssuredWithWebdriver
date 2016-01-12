@@ -30,10 +30,10 @@ public class SignUpPage extends AbstractBasePage {
     private TextInput confirmEmail;
 
     @FindBy(id = "newsletterOptIn1")
-    private CheckBox newsLetterCheckBox;
+    private CheckBox newsLetter;
 
     @FindBy(css = "input[type=\"submit\"]")
-    private Button submitButton;
+    private Button submit;
 
     @FindBy(css = "h1")
     private TextElement headerTitle;
@@ -48,7 +48,7 @@ public class SignUpPage extends AbstractBasePage {
 
     public void whenSignUp(SignUpModel model) {
         fillSignUpForm(model);
-        submitButton.click();
+        submit.click();
     }
 
     private void fillSignUpForm(SignUpModel model) {
@@ -57,9 +57,9 @@ public class SignUpPage extends AbstractBasePage {
         emailAddress.set(model.getEmail());
         confirmEmail.set(model.getEmailConfirmation());
         if (model.getWantNewsletters()) {
-        	newsLetterCheckBox.check();
+        	newsLetter.check();
         } else  {
-        	newsLetterCheckBox.uncheck();
+        	newsLetter.uncheck();
         }
     }
 
@@ -88,11 +88,11 @@ public class SignUpPage extends AbstractBasePage {
 	}
 
 	public CheckBox getNewsLetterCheckBox() {
-		return newsLetterCheckBox;
+		return newsLetter;
 	}
 
 	public Button getSubmitButton() {
-		return submitButton;
+		return submit;
 	}
     
 }
